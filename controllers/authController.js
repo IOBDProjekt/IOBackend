@@ -16,7 +16,7 @@ const register = async (req, res) => {
     };
 
     try {
-        const [result] = await db.query(
+        const [result] = await db.execute(
             `   
             SELECT 
                 u.id_user 
@@ -35,7 +35,7 @@ const register = async (req, res) => {
                 .json({ message: "User already exists" });
 
         const hashedPassword = await bcrypt.hash(user.password, 10);
-        const [insertResult] = await db.query(
+        const [insertResult] = await db.execute(
             `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
             [user.username, user.email, hashedPassword]
         );
@@ -56,7 +56,7 @@ const login = async (req, res) => {
     };
 
     try {
-        const [result] = await db.query(
+        const [result] = await db.execute(
             `   
             SELECT 
                 *
@@ -84,6 +84,7 @@ const login = async (req, res) => {
                 .status(StatusCodes.BAD_REQUEST)
                 .json({ message: "Invalid password" });
 
+        userResult.role = "user";
         const token = jwt.sign(userResult, process.env.SECRET_TOKEN, {
             expiresIn: "1h",
         });
@@ -101,7 +102,7 @@ const login = async (req, res) => {
 };
 
 const me = (req, res) => {
-    res.json(req.user);
+    res.json(req.authData);
 };
 
 const forgotPassword = async (req, res) => {
@@ -114,7 +115,7 @@ const forgotPassword = async (req, res) => {
     }
 
     try {
-        const [result] = await db.query(
+        const [result] = await db.execute(
             "SELECT * FROM users WHERE email = ?;",
             [email]
         );
@@ -211,7 +212,7 @@ const resetPassword = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const [result] = await db.query(
+        const [result] = await db.execute(
             `
                 UPDATE users
                 SET password = ?

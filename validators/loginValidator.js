@@ -1,12 +1,6 @@
 const { body } = require("express-validator");
 
 module.exports = [
-    body("password")
-        .trim()
-        .isLength({ min: 3 })
-        .withMessage("Empty password provided"),
-    body("username")
-        .trim()
-        .isLength({ min: 3 })
-        .withMessage("Empty username provided"),
+    body("password").trim().notEmpty().withMessage("Empty password provided"),
+    body("username").trim().notEmpty().withMessage("Empty username provided"),
 ];
