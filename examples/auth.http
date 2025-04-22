@@ -1,0 +1,43 @@
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "username": "Jakub",
+    "password": "123",
+    "email": "example@gmail.com"
+}
+
+###
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "username": "Jakub",
+    "password": "123"
+}
+
+
+###
+
+GET http://localhost:3000/auth/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJlbWFpbCI6Impha3ViMjEzeEBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Ikpha3ViIiwicGFzc3dvcmQiOiIkMmIkMTAkSTdVZFRhbFRPVW9RTHBBM0VMdXUyLjZNN203ZmIyWmcxRVhseWI0bGowNE1iVmhnTXlFZ0siLCJjaXR5IjpudWxsLCJpYXQiOjE3NDUzMTgyNzV9.n9jbpTdhC0FEcA14WrfYtvl40FmbQKMHmHCwl-NVRaY
+
+###
+
+POST http://localhost:3000/auth/forgot-password
+Content-Type: application/json
+
+{
+    "email": "jakub213x@gmail.com"
+}
+
+###
+POST http://localhost:3000/auth/reset-password
+Content-Type: application/json
+
+{
+    "password": "123",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJpYXQiOjE3NDUzMTk2MDEsImV4cCI6MTc0NTMyMDUwMX0.qzUepHJkYOulVuVwSuAgsntdHJD4KSr_1y_mQmCQVA0"
+}

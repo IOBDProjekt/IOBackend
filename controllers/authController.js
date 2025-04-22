@@ -1,12 +1,10 @@
 const db = require("../db.js");
 
-const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Resend } = require("resend");
-const router = express.Router();
 
-const authenticate = require("../middleware/authenticate.js");
+const { StatusCodes } = require("http-status-codes");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -32,7 +30,9 @@ const register = async (req, res) => {
         );
 
         if (result.length > 0)
-            return res.status(400).json({ message: "User already exists" });
+            return res
+                .status(StatusCodes.BAD_REQUEST)
+                .json({ message: "User already exists" });
 
         const hashedPassword = await bcrypt.hash(user.password, 10);
         const [insertResult] = await db.query(
@@ -40,11 +40,12 @@ const register = async (req, res) => {
             [user.username, user.email, hashedPassword]
         );
 
-        return res.status(201).json({
+        return res.status(StatusCodes.CREATED).json({
             message: "User created successfully",
+            body: insertResult,
         });
     } catch (error) {
-        return res.status(500).json(error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
     }
 };
 
@@ -68,7 +69,9 @@ const login = async (req, res) => {
         );
 
         if (result.length <= 0)
-            return res.status(400).json({ message: "User does not exists" });
+            return res
+                .status(StatusCodes.BAD_REQUEST)
+                .json({ message: "User does not exists" });
 
         const userResult = result[0];
         const authResult = await bcrypt.compare(
@@ -77,18 +80,23 @@ const login = async (req, res) => {
         );
 
         if (!authResult)
-            return res.status(400).json({ message: "Invalid password" });
+            return res
+                .status(StatusCodes.BAD_REQUEST)
+                .json({ message: "Invalid password" });
 
         const token = jwt.sign(userResult, process.env.SECRET_TOKEN, {
             expiresIn: "1h",
         });
 
-        res.json({
+        // generate test token
+        // const token = jwt.sign(userResult, process.env.SECRET_TOKEN);
+
+        return res.json({
             message: "Successful login",
             token,
         });
     } catch (error) {
-        return res.status(500).json(error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
     }
 };
 
@@ -100,7 +108,9 @@ const forgotPassword = async (req, res) => {
     const email = req.body.email;
 
     if (!email) {
-        return res.status(400).json({ message: "Email is required" });
+        return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: "Email is required" });
     }
 
     try {
@@ -110,7 +120,7 @@ const forgotPassword = async (req, res) => {
         );
 
         if (result.length <= 0) {
-            return res.status(400).json({
+            return res.status(StatusCodes.BAD_REQUEST).json({
                 message: "User does not exist",
             });
         }
@@ -120,8 +130,6 @@ const forgotPassword = async (req, res) => {
         const token = jwt.sign({ id_user: userID }, process.env.SECRET_TOKEN, {
             expiresIn: "15m",
         });
-
-        const resetLink = `http://localhost:3000/reset-password/${token}`;
 
         resend.emails.send({
             from: "passwordreset@resend.dev",
@@ -151,7 +159,7 @@ const forgotPassword = async (req, res) => {
                             </tr>
                             <tr>
                             <td align="center">
-                                <a href="${token}" style="
+                                <a href="https://iofrontend-5tti.onrender.com/reset-pasword?token=${token}" style="
                                 background-color: #4CAF50;
                                 color: white;
                                 padding: 12px 24px;
@@ -177,18 +185,50 @@ const forgotPassword = async (req, res) => {
                 </html>`,
         });
 
-        res.status(200).json({
+        res.status(StatusCodes.OK).json({
             message: "Email send",
         });
     } catch (err) {
-        return res.status(500).json({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             message: "Error",
             body: err,
         });
     }
 };
 
-const resetPassword = (req, res) => {};
+const resetPassword = async (req, res) => {
+    const resetToken = req.body.token;
+    const password = req.body.password;
+
+    if (!resetToken)
+        return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: "Invalid token" });
+
+    try {
+        const data = jwt.verify(resetToken, process.env.SECRET_TOKEN);
+        const userId = data.id_user;
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const [result] = await db.query(
+            `
+                UPDATE users
+                SET password = ?
+                WHERE id_user = ?
+            `,
+            [hashedPassword, userId]
+        );
+
+        return res.status(StatusCodes.OK).json({
+            message: "Password updated successfully",
+        });
+    } catch (error) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            message: error.message,
+        });
+    }
+};
 
 module.exports = {
     register,

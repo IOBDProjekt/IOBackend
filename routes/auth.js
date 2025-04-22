@@ -1,10 +1,12 @@
-const db = require("../db.js");
-
 const express = require("express");
-const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 const authenticate = require("../middleware/authenticate.js");
+const {
+    validateLogin,
+    validateRegister,
+    validatePassword,
+} = require("../middleware/validate.js");
 const {
     register,
     login,
@@ -14,10 +16,10 @@ const {
 } = require("../controllers/authController.js");
 
 router
-    .post("/register", register)
-    .post("/login", login)
+    .post("/register", validateRegister, register)
+    .post("/login", validateLogin, login)
     .get("/me", authenticate, me)
     .post("/forgot-password", forgotPassword)
-    .post("/reset-password", resetPassword);
+    .post("/reset-password", validatePassword, resetPassword);
 
 module.exports = router;
