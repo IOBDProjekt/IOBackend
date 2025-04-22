@@ -1,0 +1,12 @@
+POST http://localhost:3000/shelter/login
+Content-Type: application/json
+
+{
+    "username": "shelter",
+    "password": "123"
+}
+
+###
+
+GET http://localhost:3000/shelter/info
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9zaGVsdGVyIjoxLCJuYW1lIjoiU2Nocm9uaXNrbyBkbGEgWndpZXJ6xIV0IiwidXNlcm5hbWUiOiJzaGVsdGVyIiwicGFzc3dvcmQiOiIkMmIkMTAkYUZWY0kxeTE3dTZUeDZWcVhJWjI4ZVhIU0pOaGtabi5RT25rTzRGWnhRa1o4T01YQVQ5ZFciLCJjaXR5IjoiIiwicm9sZSI6InNoZWx0ZXIiLCJpYXQiOjE3NDUzMjUxOTZ9.gOqB_S8FFYKuVetgk4XfPbmUL8gEadlEJCfDWyEKl8A

@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const registerValidator = require("../validators/registerValidator");
 const loginValidator = require("../validators/loginValidator");
 const passwordValidator = require("../validators/passwordValidator");
+const shelterValidator = require("../validators/shelterValidator");
 const { StatusCodes } = require("http-status-codes");
 
 const validate = async (request, validator) => {
@@ -51,8 +52,21 @@ const validatePassword = async (req, res, next) => {
     next();
 };
 
+const validateShelter = async (req, res, next) => {
+    const result = await validate(req, shelterValidator);
+
+    if (result.length > 0) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            messages: result,
+        });
+    }
+
+    next();
+};
+
 module.exports = {
     validateRegister,
     validateLogin,
     validatePassword,
+    validateShelter,
 };

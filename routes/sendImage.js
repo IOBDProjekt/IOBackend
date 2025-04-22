@@ -15,7 +15,7 @@ router.post("/sendImage", upload.single("image"), async (req, res) => {
     const { originalname, encoding, mimetype, size, buffer } = req.file;
 
     try {
-        await db.query(
+        await db.execute(
             `
             INSERT INTO images (Name, Encoding, Mimetype, Size, ImageData)
             VALUES (?, ?, ?, ?, ?)
@@ -35,7 +35,7 @@ router.get("/getImage/:fileName", async (req, res) => {
     const { fileName } = req.params;
 
     try {
-        const [rows] = await db.query(
+        const [rows] = await db.execute(
             `
             SELECT * FROM images WHERE images.name = ?
             `,
