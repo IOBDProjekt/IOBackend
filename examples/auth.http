@@ -2,9 +2,9 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "username": "Jakub",
+    "username": "Maciej",
     "password": "123",
-    "email": "example@gmail.com"
+    "email": "krempa@gmail.com"
 }
 
 ###
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 {
     "username": "Jakub",
-    "password": "123"
+    "password": "1234"
 }
 
 
@@ -22,7 +22,7 @@ Content-Type: application/json
 
 GET http://localhost:3000/auth/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJlbWFpbCI6Impha3ViMjEzeEBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Ikpha3ViIiwicGFzc3dvcmQiOiIkMmIkMTAkR0JIeHlrVTh1cGJlZWJYQnlyaTZkT1BPUGpyWld6LzRmMWdNdS9tRC95RHlVdDRFeUwxajIiLCJjaXR5IjpudWxsLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NTMyMTEwNH0.YI7J3iI9D0qaNmjxuqDf_1KQre6cFWMO7WPkWIoue6Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJlbWFpbCI6Impha3ViMjEzeEBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Ikpha3ViIiwicGFzc3dvcmQiOiIkMmIkMTAkR0JIeHlrVTh1cGJlZWJYQnlyaTZkT1BPUGpyWld6LzRmMWdNdS9tRC95RHlVdDRFeUwxajIiLCJjaXR5IjpudWxsLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NzU4MTEyMywiZXhwIjoxNzQ3NTg0NzIzfQ.NhabcuWNu_KEzKV8hMH3yVH_QnhUf8NolDr3nTb-w1M
 
 ###
 
@@ -38,6 +38,6 @@ POST http://localhost:3000/auth/reset-password
 Content-Type: application/json
 
 {
-    "password": "123",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJpYXQiOjE3NDUzMTk2MDEsImV4cCI6MTc0NTMyMDUwMX0.qzUepHJkYOulVuVwSuAgsntdHJD4KSr_1y_mQmCQVA0"
+    "password": "1234",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJpYXQiOjE3NDc1ODE0MDQsImV4cCI6MTc0NzU4MjMwNH0.O-CiE01CPTC-BUkAp3R4dg7433xe36RKqRqJwm4fid0"
 }

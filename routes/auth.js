@@ -6,6 +6,7 @@ const {
     validateLogin,
     validateRegister,
     validatePassword,
+    validateEmail,
 } = require("../middleware/validate.js");
 const {
     register,
@@ -19,7 +20,7 @@ router
     .post("/register", validateRegister, register)
     .post("/login", validateLogin, login)
     .get("/me", authenticate, me)
-    .post("/forgot-password", forgotPassword)
+    .post("/forgot-password", validateEmail, forgotPassword)
     .post("/reset-password", validatePassword, resetPassword);
 
 module.exports = router;
