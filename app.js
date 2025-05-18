@@ -10,19 +10,21 @@ const authRouter = require("./routes/auth");
 const imageRouter = require("./routes/sendImage");
 const shelterRouter = require("./routes/shelter");
 const adminRouter = require("./routes/admin");
+const favoriteRouter = require("./routes/favorite");
 
 app.use(
-    cors({
-        origin: "*",
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-        credentials: true,
-    })
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
 );
 app.use(express.json());
 app.use("/auth", authRouter);
 app.use("/image", imageRouter);
 app.use("/admin", adminRouter);
 app.use("/shelter", shelterRouter);
+app.use("/favorite", favoriteRouter);
 
 app.listen(PORT, () => console.log(`App is running on port ${PORT}`));
