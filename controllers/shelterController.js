@@ -63,17 +63,39 @@ const info = (req, res) => {
 };
 
 const listing = async (req, res) => {
-	const { shelterID, imageID, description } = req.body;
+	const {
+		name,
+		speciesID,
+		breedID,
+		age,
+		sex,
+		condition,
+		status,
+		shelterID,
+		imageID,
+		tagID,
+	} = req.body;
 
 	try {
 		const [result] = await db.execute(
 			`   
             INSERT INTO
-               listings 
-            (id_shelter, id_image, description) VALUES 
-                (?,?,?);
+                pets
+            (name,id_species,id_breed,age,sex,condition, status,id_shelter, id_image, id_tag) VALUES 
+                (?,?,?,?,?,?,?,?,?,?);
             `,
-			[shelterID, imageID, description],
+			[
+				name,
+				speciesID,
+				breedID,
+				age,
+				sex,
+				condition,
+				status,
+				shelterID,
+				imageID,
+				tagID,
+			],
 		);
 
 		return res.json(result);
@@ -85,9 +107,41 @@ const listing = async (req, res) => {
 const listings = async (req, res) => {
 	try {
 		const [result] = await db.execute(
-			`   
-            SELECT id_shelter, id_image, description 
-            FROM listings 
+			`
+            SELECT name,species.species,breed,age,sex, status,id_shelter, id_image, tags.character
+            FROM pets 
+            LEFT JOIN species on species.id_species = pets.id_species
+            LEFT JOIN breeds on breeds.id_breed = pets.id_breed
+            LEFT JOIN tags on tags.id_tag = pets.id_tag
+            `,
+		);
+
+		return res.json(result);
+	} catch (error) {
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+const breeds = async (res) => {
+	try {
+		const [result] = await db.execute(
+			`
+            SELECT breed, species
+            FROM breeds
+            RIGHT JOIN species ON species.id_species = breeds.id_species
+            `,
+		);
+
+		return res.json(result);
+	} catch (error) {
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+	}
+};
+
+const species = async (res) => {
+	try {
+		const [result] = await db.execute(
+			`
+            SELECT species FROM species
             `,
 		);
 
@@ -102,4 +156,6 @@ module.exports = {
 	info,
 	listing,
 	listings,
+	breeds,
+	species,
 };

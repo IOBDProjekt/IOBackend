@@ -8,9 +8,12 @@ const {
 	info,
 	listing,
 	listings,
+	breeds,
+	species,
 } = require("../controllers/shelterController.js");
 
 router.post("/login", validateLogin, login).get("/info", authenticate, info);
 router.post("/listing", listing).get("/listings", listings);
+router.get("/breeds", breeds).get("/species", species);
 
 module.exports = router;
