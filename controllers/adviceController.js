@@ -3,24 +3,23 @@ const db = require("../db.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Resend } = require("resend");
-const ShelterService = require('../services/shelterService.js')
+const AdviceService = require('../services/adviceService.js')
 
 const { StatusCodes } = require("http-status-codes");
 
-const addShelter = async (req, res) => {
-    const shelterData = {
-        name: req.body.name,
-        city: req.body.city,
-        number: req.body.number,
-        email: req.body.email,
+const addAdvice = async (req, res) => {
+    const adviceData = {
+        title: req.body.title,
+        content: req.body.content,
+        type: req.body.type,
     };
 
     try {
-        const newShelter = await ShelterService.createShelter(shelterData);
+        const newAdvice = await AdviceService.createAdvice(adviceData);
 
         return res
             .status(StatusCodes.CREATED)
-            .json({ message: "Shelter added successfully", newShelter});
+            .json({ message: "Advice added successfully", newAdvice});
     } catch (error) {
         return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -29,5 +28,5 @@ const addShelter = async (req, res) => {
 };
 
 module.exports = {
-    addShelter
+    addAdvice
 };

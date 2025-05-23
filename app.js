@@ -21,6 +21,7 @@ app.use(express.json());
 app.use("/auth", require("./routes/auth"));
 app.use("/image", require("./routes/sendImage"));
 app.use("/shelter", require("./routes/shelter"));
+app.use("/advice", require("./routes/advice"));
 // app.use("/pet", require("./routes/pet"));
 
 app.listen(PORT, () => console.log(`App is running on port ${PORT}`));
