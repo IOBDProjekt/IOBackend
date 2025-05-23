@@ -10,12 +10,19 @@ const User = sequelize.define(
             autoIncrement: true,
             allowNull: false,
         },
-        email: {
-            type: DataTypes.STRING(255),
+        firstname: {
+            type: DataTypes.STRING(50),
             allowNull: false,
-            unique: true,
         },
-        username: {
+        lastname: {
+            type: DataTypes.STRING(50),
+            allowNull: false,
+        },
+        city: {
+            type: DataTypes.STRING(100),
+            allowNull: false,
+        },
+        email: {
             type: DataTypes.STRING(100),
             allowNull: false,
             unique: true,
@@ -24,10 +31,11 @@ const User = sequelize.define(
             type: DataTypes.STRING(255),
             allowNull: false,
         },
-        city: {
-            type: DataTypes.STRING(100),
-            allowNull: true,
+        role: {
+            type: DataTypes.STRING(30),
+            allowNull: false,
         },
+        
     },
     {
         tableName: "users",
