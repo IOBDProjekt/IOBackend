@@ -2,12 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { authenticate } = require("../middleware/authenticate.js");
-const {
-    validateLogin,
-    validateRegister,
-    validatePassword,
-    validateEmail,
-} = require("../middleware/validate.js");
+const { validate } = require("../middleware/validate.js");
 const {
     register,
     login,
@@ -17,10 +12,10 @@ const {
 } = require("../controllers/authController.js");
 
 router
-    .post("/register", validateRegister, register)
-    .post("/login", validateLogin, login)
+    .post("/register", validate("register"), register)
+    .post("/login", validate("login"), login)
     .get("/me", authenticate, me)
-    .post("/forgot-password", validateEmail, forgotPassword)
-    .post("/reset-password", validatePassword, resetPassword);
+    .post("/forgot-password", validate("email"), forgotPassword)
+    .post("/reset-password", validate("password"), resetPassword);
 
 module.exports = router;

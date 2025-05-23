@@ -35,12 +35,18 @@ const User = sequelize.define(
             type: DataTypes.STRING(30),
             allowNull: false,
         },
-        
     },
     {
         tableName: "users",
         timestamps: false,
     }
 );
+
+User.associate = (models) => {
+    User.hasMany(models.Favourite, {
+        foreignKey: "id_user",
+        as: "favourites",
+    });
+};
 
 module.exports = User;

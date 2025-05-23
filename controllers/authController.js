@@ -9,10 +9,12 @@ const UserService = require("../services/userService.js");
 
 const register = async (req, res) => {
     const userData = {
-        username: req.body.username,
-        password: req.body.password,
         email: req.body.email,
+        password: req.body.password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
         city: req.body.city,
+        role: "user",
     };
 
     try {
@@ -29,11 +31,10 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
-        const user = await UserService.loginUser(username, password);
-        user.role = "user";
+        const user = await UserService.loginUser(email, password);
 
         const token = jwt.sign(user, process.env.SECRET_TOKEN, {
             expiresIn: "1h",

@@ -5,31 +5,27 @@ const bcrypt = require("bcryptjs");
 const createUser = async (userData) => {
     const existingUser = await User.findOne({
         where: {
-            [Op.or]: [
-                { username: userData.username },
-                { email: userData.email },
-            ],
+            email: userData.email,
         },
     });
 
     if (existingUser) {
-        throw new Error("User already exists");
+        throw new Error("Email already in use");
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
 
     userData.password = hashedPassword;
 
-    console.log(userData);
     const user = await User.create(userData);
 
     return user.toJSON();
 };
 
-const loginUser = async (username, password) => {
+const loginUser = async (email, password) => {
     const existingUser = await User.findOne({
         where: {
-            username: username,
+            email: email,
         },
     });
 
