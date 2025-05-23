@@ -14,7 +14,7 @@ const Favourite = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "user",
+                model: "users",
                 key: "id_user",
             },
         },

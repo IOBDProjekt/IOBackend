@@ -1,12 +1,18 @@
 const Favourite = require("../models/Favourite");
 const { Op } = require("sequelize");
 
-const getFavouritesByUser = async (userID) => {
-    return;
+const getFavouritesByUserID = async (userID) => {
+    const favs = await Favourite.findAll({
+        where: {
+            id_user: userID,
+        },
+    });
+
+    return favs;
 };
 
 const createFavourite = async (userID, petID) => {
-    const existingFav = Favourite.findOne({
+    const existingFav = await Favourite.findOne({
         where: {
             [Op.and]: [{ id_user: userID }, { id_pet: petID }],
         },
@@ -15,9 +21,12 @@ const createFavourite = async (userID, petID) => {
     if (existingFav)
         throw new Error("This pet is already in your favourites list");
 
-    const fav = await Favourite.create({ userID, petID });
+    const fav = await Favourite.create({ id_user: userID, id_pet: petID });
 
     return fav.toJSON();
 };
 
-module.exports = {};
+module.exports = {
+    createFavourite,
+    getFavouritesByUserID,
+};

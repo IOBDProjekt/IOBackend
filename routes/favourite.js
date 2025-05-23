@@ -5,22 +5,16 @@ const {
     authenticate,
     authorizeRole,
 } = require("../middleware/authenticate.js");
-const { validateLogin, validateShelter } = require("../middleware/validate.js");
+const { validate } = require("../middleware/validate.js");
 const {
-    login,
-    info,
-    createShelter,
-} = require("../controllers/adminController.js");
+    allFavourite,
+    newFavourite,
+    removeFavourite,
+} = require("../controllers/favouriteController.js");
 
 router
-    .post("/login", validateLogin, login)
-    .post(
-        "/shelter",
-        authenticate,
-        authorizeRole("admin"),
-        validateShelter,
-        createShelter
-    )
-    .get("/info", authenticate, info);
+    .get("/", authenticate, allFavourite)
+    .delete("/:id", authenticate, removeFavourite)
+    .post("/", authenticate, newFavourite);
 
 module.exports = router;
