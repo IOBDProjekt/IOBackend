@@ -18,9 +18,18 @@ const getAllShelters = async () => {
     return Shelter.findAll({ include: [{ model: User, as: "user" }] });
 };
 
+const getShelterIdByUserID = async (userID) => {
+    const shelter = await Shelter.findOne({ where: { id_user: userID } });
+
+    if (!shelter) throw new Error("Shelter not found");
+
+    return shelter.toJSON()["id_shelter"];
+};
+
 module.exports = {
     createShelter,
     updateShelter,
     getAllShelters,
     assignUserToShelter,
+    getShelterIdByUserID,
 };
