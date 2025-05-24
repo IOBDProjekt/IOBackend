@@ -7,6 +7,8 @@ const validators = {
     password: require("../validators/passwordValidator"),
     shelter: require("../validators/shelterValidator"),
     email: require("../validators/emailValidator"),
+    species: require("../validators/speciesValidator"),
+    breed: require("../validators/breedValidator"),
 };
 
 const validate = (validator) => {
