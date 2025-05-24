@@ -9,8 +9,10 @@ const addAdvice = async (req, res) => {
     const adviceData = {
         title: req.body.title,
         content: req.body.content,
-        type: req.body.type,
+        type: req.body.type
     };
+
+
 
     try {
         const newAdvice = await AdviceService.createAdvice(adviceData);
@@ -25,6 +27,24 @@ const addAdvice = async (req, res) => {
     }
 };
 
+const updateAdvice = async (req, res) => {
+    const adviceData = {
+        title: req.body.title,
+        content: req.body.content,
+    };
+
+    const newTag = await TagService.updateTag(tagData.id_tag, tagData.character);
+
+    if (adviceData.content) {
+        
+    }
+    if (adviceData.title){
+
+    }
+
+}
+
 module.exports = {
     addAdvice,
+    updateAdvice,
 };
