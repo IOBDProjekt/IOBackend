@@ -22,4 +22,15 @@ const Species = sequelize.define(
 	},
 );
 
+Species.associate = (models) => {
+    Species.hasMany(models.Breed, {
+        foreignKey: "id_species",
+        as: "spieces",
+    });
+	Species.hasMany(models.Pet, {
+    foreignKey: "id_species",
+    as: "pets",
+  });
+};
+
 module.exports = Species;

@@ -47,6 +47,22 @@ User.associate = (models) => {
         foreignKey: "id_user",
         as: "favourites",
     });
+    User.hasMany(models.Messages, {
+    foreignKey: 'id_sender',
+    as: 'sentMessages',
+    });
+    User.hasMany(models.Messages, {
+        foreignKey: 'id_receiver',
+        as: 'receivedMessages',
+    });
+    User.hasMany(models.AdoptionForm, {
+        foreignKey: 'id_user',
+        as: 'adoptionForm',
+    });
+    User.hasMany(models.Form, {
+        foreignKey: 'id_user',
+        as: 'form',
+    });
 };
 
 module.exports = User;

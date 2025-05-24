@@ -1,19 +1,15 @@
 const { DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../database");
 
-const Advice = sequelize.define(
-	"Advice",
+const Notification = sequelize.define(
+	"Notification",
 	{
-		id_advice: {
+		id_notification: {
 			type: DataTypes.INTEGER,
 			autoIncrement: true,
 			primaryKey: true,
 			allowNull: false,
 			unique: true,
-		},
-		title: {
-			type: DataTypes.STRING(150),
-			allowNull: false,
 		},
         content: {
 			type: DataTypes.TEXT,
@@ -23,29 +19,29 @@ const Advice = sequelize.define(
 			type: DataTypes.STRING(30),
 			allowNull: false,
 		},
-        addedAt: {
+        sentAt: {
 			type: DataTypes.DATE,
 			allowNull: false,
             defaultValue: Sequelize.NOW
 		},
-		id_shelter: {
+		id_adoptionForm: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "shelters",
-                key: "id_shelter",
+                model: "adoptionForms",
+                key: "id_adoptionForm",
             },
             onDelete: "NO ACTION",
         },
 	},
 	{
-		tableName: "advice",
+		tableName: "notification",
 		timestamps: false,
 	},
 );
 
-Advice.associate = (models) => {
-    Advice.belongsTo(models.Shelter, { foreignKey: "id_shelter", as: "shelter" });
+Notification.associate = (models) => {
+    Notification.belongsTo(models.AdoptionForm, { foreignKey: "id_adoptionForm", as: "adoptionForm" });
   };
 
-module.exports = Advice;
+module.exports = Notification;

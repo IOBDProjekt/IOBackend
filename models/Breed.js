@@ -35,6 +35,10 @@ Breed.associate = (models) => {
         foreignKey: "id_species",
         as: "species",
     });
+    Breed.hasMany(models.Pet, {
+    foreignKey: "id_breed",
+    as: "pets",
+  });
 };
 
 module.exports = Breed;

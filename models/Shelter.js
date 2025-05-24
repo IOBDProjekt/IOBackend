@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../database");
+const Advice = require("./Advice");
 
 const Shelter = sequelize.define(
 	"Shelter",
@@ -32,4 +33,10 @@ const Shelter = sequelize.define(
 		timestamps: false,
 	},
 );
+
+Shelter.associate = (models) => {
+    Shelter.hasMany(models.Advice, { foreignKey: "id_shelter", as: "advices" });
+	Shelter.hasMany(models.Pet, { foreignKey: "id_shelter", as: "pets" });
+  };
+
 module.exports = Shelter;

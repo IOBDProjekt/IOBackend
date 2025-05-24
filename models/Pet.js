@@ -71,6 +71,11 @@ Pet.associate = (models) => {
 	Pet.belongsTo(models.Breed, { foreignKey: "id_breed", as: "breed" });
 	Pet.belongsTo(models.Shelter, { foreignKey: "id_shelter", as: "shelter" });
 	Pet.belongsTo(models.Image, { foreignKey: "id_image", as: "image" });
-	Pet.belongsTo(models.Tag, { foreignKey: "id_tag", as: "tag" });
+	Pet.belongsToMany(models.Tag, {through: 'PetTags' , as: "tags", foreignKey: "id_pet" });
+	Pet.hasMany(models.AdoptionForm, { foreignKey: "id_pet", as: "adoptionForms" });
+	Pet.hasMany(models.Form, {
+      foreignKey: 'id_pet',
+      as: 'forms',
+    });
 };
 module.exports = Pet;
