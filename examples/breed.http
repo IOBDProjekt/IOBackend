@@ -1,0 +1,22 @@
+POST http://localhost:3000/breed 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTAyMzI2fQ.cwmdzdPWTcEi7QaDW1p1eoqeOXs7s5GcouRvJKWhu3Y
+Content-Type: application/json
+
+{
+    "name": "Anglik",
+    "id_species": 1
+}
+
+###
+
+PUT http://localhost:3000/breed/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTAyMzI2fQ.cwmdzdPWTcEi7QaDW1p1eoqeOXs7s5GcouRvJKWhu3Y
+Content-Type: application/json
+
+{
+    "name": "Kot Puchaty"
+}
+
+###
+
+GET http://localhost:3000/breed
