@@ -6,8 +6,23 @@ const {
     authorizeRole,
 } = require("../middleware/authenticate.js");
 const { validate } = require("../middleware/validate.js");
-const { addShelter } = require("../controllers/shelterController.js");
+const {
+    addShelter,
+    updateShelter,
+    allShelters,
+    assignUserToShelter,
+} = require("../controllers/shelterController.js");
 
-router.post("/add", authorizeRole("admin"), validate("shelter"), addShelter);
+router
+    .post(
+        "/",
+        authenticate,
+        authorizeRole("admin"),
+        validate("shelter"),
+        addShelter
+    )
+    .put("/:id", authenticate, authorizeRole("admin"), updateShelter)
+    .get("/", authenticate, authorizeRole("admin"), allShelters)
+    .post("/assign", authenticate, authorizeRole("admin"), assignUserToShelter);
 
 module.exports = router;

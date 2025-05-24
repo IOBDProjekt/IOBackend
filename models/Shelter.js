@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../database");
-const Advice = require("./Advice");
 
 const Shelter = sequelize.define(
     "Shelter",
@@ -45,7 +44,7 @@ const Shelter = sequelize.define(
 Shelter.associate = (models) => {
     Shelter.hasMany(models.Advice, { foreignKey: "id_shelter", as: "advices" });
     Shelter.hasMany(models.Pet, { foreignKey: "id_shelter", as: "pets" });
-    Shelter.hasOne(models.User, { foreignKey: "id_user", as: "user" });
+    Shelter.belongsTo(models.User, { foreignKey: "id_user", as: "user" });
 };
 
 module.exports = Shelter;
