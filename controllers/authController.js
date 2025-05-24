@@ -30,6 +30,31 @@ const register = async (req, res) => {
     }
 };
 
+const registerShelterAccount = async (req, res) => {
+    const userData = {
+        email: req.body.email,
+        password: req.body.password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        city: req.body.city,
+        role: "shelter",
+    };
+
+    try {
+        const newShelterAccount =
+            await UserService.createShelterAccount(userData);
+
+        return res.status(StatusCodes.CREATED).json({
+            message: "Shelter account created successfully",
+            user: newShelterAccount,
+        });
+    } catch (error) {
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
+    }
+};
+
 const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -160,4 +185,5 @@ module.exports = {
     me,
     forgotPassword,
     resetPassword,
+    registerShelterAccount,
 };

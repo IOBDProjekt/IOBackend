@@ -2,9 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-// const db = require("./database");
-// db.sync({ alter: true });
-const db = require("./models")
+const db = require("./models");
 
 require("dotenv").config();
 
@@ -20,11 +18,11 @@ app.use(
 );
 
 // Database Debugging
-// db.sequelize.sync({ force: true });
+// db.sequelize.sync({ alter: true });
 
 app.use(express.json());
 app.use("/auth", require("./routes/auth"));
-app.use("/image", require("./routes/sendImage"));
+// app.use("/image", require("./routes/sendImage"));
 app.use("/shelter", require("./routes/shelter"));
 app.use("/advice", require("./routes/advice"));
 app.use("/favourite", require("./routes/favourite"));

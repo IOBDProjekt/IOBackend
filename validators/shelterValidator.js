@@ -1,7 +1,13 @@
 const { body } = require("express-validator");
 
 module.exports = [
-    body("password").trim().notEmpty().withMessage("Empty password provided"),
-    body("login").trim().notEmpty().withMessage("Empty username provided"),
-    body("name").trim().isLength({ min: 5 }).withMessage("Name is too short"),
+    body("name").trim().notEmpty().withMessage("Empty shelter name provided"),
+    body("city")
+        .trim()
+        .notEmpty()
+        .withMessage("Empty shelter address provided"),
+    body("email")
+        .trim()
+        .isEmail()
+        .withMessage("Invalid shelter email provided"),
 ];

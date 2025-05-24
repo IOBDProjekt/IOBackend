@@ -14,12 +14,28 @@ const createUser = async (userData) => {
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-
     userData.password = hashedPassword;
 
     const user = await User.create(userData);
 
     return user.toJSON();
+};
+
+const createShelterAccount = async (userData) => {
+    const existingShelterAccount = await User.findOne({
+        where: {
+            email: userData.email,
+        },
+    });
+
+    if (existingShelterAccount) throw new Error("Email is already in use");
+
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    userData.password = hashedPassword;
+
+    const shelterAccount = await User.create(userData);
+
+    return shelterAccount.toJSON();
 };
 
 const loginUser = async (email, password) => {
@@ -64,4 +80,5 @@ module.exports = {
     loginUser,
     updateUserPassword,
     findUserByEmail,
+    createShelterAccount,
 };

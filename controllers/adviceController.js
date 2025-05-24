@@ -1,9 +1,7 @@
-const db = require("../db.js");
-
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Resend } = require("resend");
-const AdviceService = require('../services/adviceService.js')
+const AdviceService = require("../services/adviceService.js");
 
 const { StatusCodes } = require("http-status-codes");
 
@@ -19,7 +17,7 @@ const addAdvice = async (req, res) => {
 
         return res
             .status(StatusCodes.CREATED)
-            .json({ message: "Advice added successfully", newAdvice});
+            .json({ message: "Advice added successfully", newAdvice });
     } catch (error) {
         return res
             .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -28,5 +26,5 @@ const addAdvice = async (req, res) => {
 };
 
 module.exports = {
-    addAdvice
+    addAdvice,
 };

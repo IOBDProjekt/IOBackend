@@ -21,10 +21,10 @@ const Favourite = sequelize.define(
         id_pet: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            // references: {
-            //     model: "pet",
-            //     key: "id_pet",
-            // },
+            references: {
+                model: "pets",
+                key: "id_pet",
+            },
         },
         addedAt: {
             type: DataTypes.DATE,

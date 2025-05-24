@@ -48,20 +48,24 @@ User.associate = (models) => {
         as: "favourites",
     });
     User.hasMany(models.Messages, {
-    foreignKey: 'id_sender',
-    as: 'sentMessages',
+        foreignKey: "id_sender",
+        as: "sentMessages",
     });
     User.hasMany(models.Messages, {
-        foreignKey: 'id_receiver',
-        as: 'receivedMessages',
+        foreignKey: "id_receiver",
+        as: "receivedMessages",
     });
     User.hasMany(models.AdoptionForm, {
-        foreignKey: 'id_user',
-        as: 'adoptionForm',
+        foreignKey: "id_user",
+        as: "adoptionForm",
     });
     User.hasMany(models.Form, {
-        foreignKey: 'id_user',
-        as: 'form',
+        foreignKey: "id_user",
+        as: "form",
+    });
+    User.belongsTo(models.Shelter, {
+        foreignKey: "id_user",
+        as: "shelter",
     });
 };
 

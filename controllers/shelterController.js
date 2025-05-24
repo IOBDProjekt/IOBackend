@@ -1,5 +1,3 @@
-const db = require("../db.js");
-
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Resend } = require("resend");
