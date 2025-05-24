@@ -27,5 +27,6 @@ app.use("/shelter", require("./routes/shelter"));
 app.use("/advice", require("./routes/advice"));
 app.use("/favourite", require("./routes/favourite"));
 // app.use("/pet", require("./routes/pet"));
+app.use("/tag", require("./routes/tag"))
 
 app.listen(PORT, () => console.log(`App is running on port ${PORT}`));

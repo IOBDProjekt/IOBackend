@@ -121,7 +121,7 @@ const forgotPassword = async (req, res) => {
                             <tr>
                             <td align="center">
                                 <a href="https://iofrontend-5tti.onrender.com/reset-pasword?token=${token}" style="
-                                background-color: #4CAF50;
+                                background-color:rgb(28, 48, 29);
                                 color: white;
                                 padding: 12px 24px;
                                 text-decoration: none;
