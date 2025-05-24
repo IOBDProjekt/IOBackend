@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Resend } = require("resend");
 const AdviceService = require("../services/adviceService.js");
+const ShelterService = require("../services/shelterService.js")
 
 const { StatusCodes } = require("http-status-codes");
 
@@ -12,9 +13,11 @@ const addAdvice = async (req, res) => {
         type: req.body.type
     };
 
-
-
     try {
+        const shelterID = await ShelterService.getShelterIdByUserID(req.authData["id_user"]);
+
+        adviceData["id_shelter"] = shelterID;
+
         const newAdvice = await AdviceService.createAdvice(adviceData);
 
         return res
@@ -31,15 +34,32 @@ const updateAdvice = async (req, res) => {
     const adviceData = {
         title: req.body.title,
         content: req.body.content,
+        id_advice: req.params.id
     };
 
-    const newTag = await TagService.updateTag(tagData.id_tag, tagData.character);
+    console.log(req.params.id);
 
-    if (adviceData.content) {
-        
+    try {
+        const shelterID = await ShelterService.getShelterIdByUserID(req.authData["id_user"]);
+        adviceData["id_shelter"] = shelterID;
+
+        let updatedAdvice;
+
+        if (adviceData.content) {
+            updatedAdvice = await AdviceService.updateAdviceContent(adviceData);
+        }
+        if (adviceData.title){
+            updatedAdvice = await AdviceService.updateAdviceTitle(adviceData);
+        }
+
+        return res
+            .status(StatusCodes.CREATED)
+            .json({ message: "Advice updated successfully", updatedAdvice });
     }
-    if (adviceData.title){
-
+    catch (error) {
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
     }
 
 }

@@ -8,16 +8,16 @@ const createAdvice = async (adviceData) => {
     return advice.toJSON();
 };
 
-const updateAdviceTitle = async (shelterID ,adviceID, newTitle) => {
-    const adviceToUpdate = await Advice.findByPk(adviceID);
+const updateAdviceTitle = async (adviceData) => {
+    const adviceToUpdate = await Advice.findByPk(adviceData.id_advice);
     if (!adviceToUpdate) {
         throw new Error("No advice with that ID!");
     }
 
     const currentUserAdvice = await Advice.findOne({
         where: {
-            id_advice: adviceID,
-            id_shelter: shelterID
+            id_advice: adviceData.id_advice,
+            id_shelter: adviceData.id_shelter
         }
     });
     if (!currentUserAdvice) {
@@ -25,21 +25,21 @@ const updateAdviceTitle = async (shelterID ,adviceID, newTitle) => {
     }
     
     await Advice.update(
-        { title: newTitle },
-        { where: { id_advice: adviceID } }
+        { title: adviceData.title },
+        { where: { id_advice: adviceData.id_advice } }
     );
 };
 
-const updateAdviceContent = async ( shelterID ,adviceID, newContent) => {
-    const adviceToUpdate = await Advice.findByPk(adviceID);
+const updateAdviceContent = async ( adviceData ) => {
+    const adviceToUpdate = await Advice.findByPk(adviceData.id_advice);
     if (!adviceToUpdate) {
         throw new Error("No advice with that ID!");
     }
     
     const currentUserAdvice = await Advice.findOne({
             where: {
-                id_advice: adviceID,
-                id_shelter: shelterID
+                id_advice: adviceData.id_advice,
+                id_shelter: adviceData.id_shelter
             }
         });
     if (!currentUserAdvice) {
@@ -47,8 +47,8 @@ const updateAdviceContent = async ( shelterID ,adviceID, newContent) => {
     }
 
     await Advice.update(
-        { content: newContent },
-        { where: { id_advice: adviceID } }
+        { content: adviceData.content },
+        { where: { id_advice: adviceData.id_advice } }
     );
 };
 
