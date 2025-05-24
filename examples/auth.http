@@ -29,8 +29,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "shelter@gmail.com",
-    "password": "123"
+    "email": "admin@gmail.com",
+    "password": "admin"
 }
 
 

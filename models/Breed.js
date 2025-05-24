@@ -10,7 +10,7 @@ const Breed = sequelize.define(
             primaryKey: true,
             allowNull: false,
         },
-        breed: {
+        name: {
             type: DataTypes.TEXT,
             allowNull: true,
         },
@@ -36,9 +36,9 @@ Breed.associate = (models) => {
         as: "species",
     });
     Breed.hasMany(models.Pet, {
-    foreignKey: "id_breed",
-    as: "pets",
-  });
+        foreignKey: "id_breed",
+        as: "pets",
+    });
 };
 
 module.exports = Breed;
