@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { Resend } = require("resend");
 const ShelterService = require("../services/shelterService.js");
 
 const { StatusCodes } = require("http-status-codes");
@@ -26,6 +25,61 @@ const addShelter = async (req, res) => {
     }
 };
 
+const updateShelter = async (req, res) => {
+    const shelterData = {
+        name: req.body.name,
+        city: req.body.city,
+        number: req.body.number,
+        email: req.body.email,
+    };
+
+    const shelterID = req.params.id;
+
+    try {
+        const newShelter = await ShelterService.updateShelter(
+            shelterID,
+            shelterData
+        );
+
+        return res
+            .status(StatusCodes.CREATED)
+            .json({ message: "Shelter updated successfully", newShelter });
+    } catch (error) {
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
+    }
+};
+
+const allShelters = async (req, res) => {
+    try {
+        const shelters = await ShelterService.getAllShelters();
+
+        return res.json({ shelters: shelters });
+    } catch (error) {
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
+    }
+};
+
+const assignUserToShelter = async (req, res) => {
+    const userID = req.body["id_user"];
+    const shelterID = req.body["id_shelter"];
+
+    try {
+        await ShelterService.assignUserToShelter(userID, shelterID);
+        return res.json({ message: "Successfully assigned user to shelter" });
+    } catch (error) {
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
+    }
+};
+
 module.exports = {
     addShelter,
+    updateShelter,
+    allShelters,
+    assignUserToShelter,
 };

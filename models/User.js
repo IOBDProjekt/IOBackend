@@ -63,7 +63,7 @@ User.associate = (models) => {
         foreignKey: "id_user",
         as: "form",
     });
-    User.belongsTo(models.Shelter, {
+    User.hasOne(models.Shelter, {
         foreignKey: "id_user",
         as: "shelter",
     });
