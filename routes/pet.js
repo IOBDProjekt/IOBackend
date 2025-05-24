@@ -2,12 +2,19 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    authenticate,
-    authorizeRole,
+	authenticate,
+	authorizeRole,
 } = require("../middleware/authenticate.js");
-const { validateLogin, validateShelter } = require("../middleware/validate.js");
-const { test } = require("../controllers/petController.js");
+const { validate } = require("../middleware/validate.js");
+const {
+	addPet,
+	allPets,
+	changePetData,
+} = require("../controllers/petController.js");
 
-router.get("/", test);
+router
+	.post("/", authenticate, authorizeRole("shelter"), validate("Pet"), addPet)
+	.get("/", allPets)
+	.put("/:id", authenticate, authorizeRole("shelter"), changePetData);
 
 module.exports = router;
