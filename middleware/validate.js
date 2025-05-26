@@ -10,7 +10,8 @@ const validators = {
     species: require("../validators/speciesValidator"),
     breed: require("../validators/breedValidator"),
     tag: require("../validators/tagValidator"),
-    advice: require("../validators/adviceValidator")
+    advice: require("../validators/adviceValidator"),
+    pet: require("../validators/petValidator"),
 };
 
 const validate = (validator) => {
