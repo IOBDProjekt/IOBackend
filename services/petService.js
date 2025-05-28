@@ -37,7 +37,6 @@ const changePetData = async (petID, petData) => {
 	const tags = petData.tags;
 	delete petData.tags;
 
-	console.log(tags);
 	if (tags !== undefined) {
 		await PetTag.destroy({ where: { id_pet: petID } });
 		await Promise.all(

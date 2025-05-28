@@ -1,0 +1,17 @@
+POST http://localhost:3000/image/
+Content-Type: multipart/form-data
+
+image=<wybrany obraz>
+
+###
+
+GET http://localhost:3000/image/1
+
+###
+
+PUT http://localhost:3000/image/1
+Content-Type: multipart/form-data
+
+image=<wybrany obraz>
+
+###
