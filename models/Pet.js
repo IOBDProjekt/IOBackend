@@ -33,15 +33,15 @@ const Pet = sequelize.define(
 		},
 		age: {
 			type: DataTypes.STRING(10),
-			allowNull: true,
+			allowNull: false,
 		},
 		sex: {
 			type: DataTypes.STRING(10),
-			allowNull: true,
+			allowNull: false,
 		},
 		condition: {
 			type: DataTypes.STRING(30),
-			allowNull: true,
+			allowNull: false,
 		},
 		status: {
 			type: DataTypes.STRING(30),
@@ -52,10 +52,6 @@ const Pet = sequelize.define(
 			allowNull: false,
 		},
 		id_image: {
-			type: DataTypes.INTEGER,
-			allowNull: true,
-		},
-		id_tag: {
 			type: DataTypes.INTEGER,
 			allowNull: true,
 		},
@@ -71,11 +67,18 @@ Pet.associate = (models) => {
 	Pet.belongsTo(models.Breed, { foreignKey: "id_breed", as: "breed" });
 	Pet.belongsTo(models.Shelter, { foreignKey: "id_shelter", as: "shelter" });
 	Pet.belongsTo(models.Image, { foreignKey: "id_image", as: "image" });
-	Pet.belongsToMany(models.Tag, {through: 'PetTags' , as: "tags", foreignKey: "id_pet" });
-	Pet.hasMany(models.AdoptionForm, { foreignKey: "id_pet", as: "adoptionForms" });
+	Pet.belongsToMany(models.Tag, {
+		through: "PetTags",
+		as: "tags",
+		foreignKey: "id_pet",
+	});
+	Pet.hasMany(models.AdoptionForm, {
+		foreignKey: "id_pet",
+		as: "adoptionForms",
+	});
 	Pet.hasMany(models.Form, {
-      foreignKey: 'id_pet',
-      as: 'forms',
-    });
+		foreignKey: "id_pet",
+		as: "forms",
+	});
 };
 module.exports = Pet;

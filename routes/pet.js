@@ -2,19 +2,19 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    authenticate,
-    authorizeRole,
+	authenticate,
+	authorizeRole,
 } = require("../middleware/authenticate.js");
 const { validate } = require("../middleware/validate.js");
 const {
-    addPet,
-    allPets,
-    changePetData,
+	addPet,
+	allPets,
+	changePetData,
 } = require("../controllers/petController.js");
 
 router
-    .post("/", authenticate, authorizeRole("shelter"), validate("pet"), addPet)
-    .get("/", allPets)
-    .put("/:id", authenticate, authorizeRole("shelter"), changePetData);
+	.post("/", authenticate, validate("pet"), addPet)
+	.get("/", allPets)
+	.put("/:id", authenticate, changePetData);
 
 module.exports = router;

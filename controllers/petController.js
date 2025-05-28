@@ -5,15 +5,15 @@ const { condition } = require("sequelize");
 const addPet = async (req, res) => {
 	const petData = {
 		name: req.body.name,
-		speciesID: req.body["id_species"],
-		breedID: req.body["id_breed"],
+		id_species: req.body["id_species"],
+		id_breed: req.body["id_breed"],
 		age: req.body.age,
 		sex: req.body.sex,
 		condition: req.body.condition,
 		status: req.body.status,
-		shelterID: req.body["id_shelter"],
-		imageID: req.body["id_shelter"],
-		tagID: req.body["id_tag"],
+		id_shelter: req.body["id_shelter"],
+		id_image: req.body["id_image"],
+		tags: req.body.tagIDs,
 	};
 
 	try {
@@ -53,7 +53,7 @@ const changePetData = async (req, res) => {
 		status: req.body.status,
 		id_shelter: req.body["id_shelter"],
 		id_image: req.body["id_image"],
-		id_tag: req.body["id_tag"],
+		tags: req.body.tagIDs,
 	};
 	const petID = req.params.id;
 
