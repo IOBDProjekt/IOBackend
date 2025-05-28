@@ -1,6 +1,3 @@
-const db = require("../db.js");
-
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Resend } = require("resend");
 
@@ -8,96 +5,76 @@ const { StatusCodes } = require("http-status-codes");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const UserService = require("../services/userService.js");
+
 const register = async (req, res) => {
-    const user = {
-        username: req.body.username,
-        password: req.body.password,
+    const userData = {
         email: req.body.email,
+        password: req.body.password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        city: req.body.city,
+        role: "user",
     };
 
     try {
-        const [result] = await db.execute(
-            `   
-            SELECT 
-                u.id_user 
-            FROM 
-                users u 
-            WHERE 
-                u.username = ? OR 
-                u.email = ?;
-            `,
-            [user.username, user.email]
-        );
+        const newUser = await UserService.createUser(userData);
 
-        if (result.length > 0)
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "User already exists" });
+        return res
+            .status(StatusCodes.CREATED)
+            .json({ message: "User created successfully", user: newUser });
+    } catch (error) {
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
+    }
+};
 
-        const hashedPassword = await bcrypt.hash(user.password, 10);
-        const [insertResult] = await db.execute(
-            `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
-            [user.username, user.email, hashedPassword]
-        );
+const registerShelterAccount = async (req, res) => {
+    const userData = {
+        email: req.body.email,
+        password: req.body.password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        city: req.body.city,
+        role: "shelter",
+    };
+
+    try {
+        const newShelterAccount =
+            await UserService.createShelterAccount(userData);
 
         return res.status(StatusCodes.CREATED).json({
-            message: "User created successfully",
-            body: insertResult,
+            message: "Shelter account created successfully",
+            user: newShelterAccount,
         });
     } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
     }
 };
 
 const login = async (req, res) => {
-    const user = {
-        username: req.body.username,
-        password: req.body.password,
-    };
+    const { email, password } = req.body;
 
     try {
-        const [result] = await db.execute(
-            `   
-            SELECT 
-                *
-            FROM 
-                users u 
-            WHERE 
-                u.username = ?;
-            `,
-            [user.username]
-        );
+        const user = await UserService.loginUser(email, password);
 
-        if (result.length <= 0)
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "User does not exists" });
+        // const token = jwt.sign(user, process.env.SECRET_TOKEN, {
+        //     expiresIn: "1h",
+        // });
 
-        const userResult = result[0];
-        const authResult = await bcrypt.compare(
-            user.password,
-            userResult.password
-        );
-
-        if (!authResult)
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "Invalid password" });
-
-        userResult.role = "user";
-        const token = jwt.sign(userResult, process.env.SECRET_TOKEN, {
-            expiresIn: "1h",
-        });
-
-        // generate test token
-        // const token = jwt.sign(userResult, process.env.SECRET_TOKEN);
+        const token = jwt.sign(user, process.env.SECRET_TOKEN);
 
         return res.json({
             message: "Successful login",
             token,
         });
     } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: error.message,
+        });
     }
 };
 
@@ -108,25 +85,10 @@ const me = (req, res) => {
 const forgotPassword = async (req, res) => {
     const email = req.body.email;
 
-    if (!email) {
-        return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ message: "Email is required" });
-    }
-
     try {
-        const [result] = await db.execute(
-            "SELECT * FROM users WHERE email = ?;",
-            [email]
-        );
+        const user = await UserService.findUserByEmail(email);
 
-        if (result.length <= 0) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                message: "User does not exist",
-            });
-        }
-
-        const userID = result[0].id_user;
+        const userID = user.id_user;
 
         const token = jwt.sign({ id_user: userID }, process.env.SECRET_TOKEN, {
             expiresIn: "15m",
@@ -134,7 +96,7 @@ const forgotPassword = async (req, res) => {
 
         resend.emails.send({
             from: "passwordreset@resend.dev",
-            to: "jakub213x@gmail.com",
+            to: user.email,
             subject: "Password Reset",
             html: `
             <!DOCTYPE html>
@@ -161,7 +123,7 @@ const forgotPassword = async (req, res) => {
                             <tr>
                             <td align="center">
                                 <a href="https://iofrontend-5tti.onrender.com/reset-pasword?token=${token}" style="
-                                background-color: #4CAF50;
+                                background-color:rgb(28, 48, 29);
                                 color: white;
                                 padding: 12px 24px;
                                 text-decoration: none;
@@ -189,11 +151,8 @@ const forgotPassword = async (req, res) => {
         res.status(StatusCodes.OK).json({
             message: "Email send",
         });
-    } catch (err) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            message: "Error",
-            body: err,
-        });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
     }
 };
 
@@ -210,16 +169,7 @@ const resetPassword = async (req, res) => {
         const data = jwt.verify(resetToken, process.env.SECRET_TOKEN);
         const userId = data.id_user;
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const [result] = await db.execute(
-            `
-                UPDATE users
-                SET password = ?
-                WHERE id_user = ?
-            `,
-            [hashedPassword, userId]
-        );
+        await UserService.updateUserPassword(userId, password);
 
         return res.status(StatusCodes.OK).json({
             message: "Password updated successfully",
@@ -237,4 +187,5 @@ module.exports = {
     me,
     forgotPassword,
     resetPassword,
+    registerShelterAccount,
 };

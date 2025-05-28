@@ -1,72 +1,40 @@
 const { validationResult } = require("express-validator");
-const registerValidator = require("../validators/registerValidator");
-const loginValidator = require("../validators/loginValidator");
-const passwordValidator = require("../validators/passwordValidator");
-const shelterValidator = require("../validators/shelterValidator");
 const { StatusCodes } = require("http-status-codes");
 
-const validate = async (request, validator) => {
-    await Promise.all(validator.map((v) => v.run(request)));
-
-    const errors = validationResult(request);
-    if (!errors.isEmpty()) {
-        return errors.array().map((e) => e.msg);
-    }
-
-    return [];
+const validators = {
+    register: require("../validators/registerValidator"),
+    login: require("../validators/loginValidator"),
+    password: require("../validators/passwordValidator"),
+    shelter: require("../validators/shelterValidator"),
+    email: require("../validators/emailValidator"),
+    species: require("../validators/speciesValidator"),
+    breed: require("../validators/breedValidator"),
+    tag: require("../validators/tagValidator"),
+    advice: require("../validators/adviceValidator"),
+    pet: require("../validators/petValidator"),
 };
 
-const validateRegister = async (req, res, next) => {
-    const result = await validate(req, registerValidator);
+const validate = (validator) => {
+    return async (req, res, next) => {
+        await Promise.all(validators[validator].map((v) => v.run(req)));
 
-    if (result.length > 0) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            messages: result,
-        });
-    }
+        let result = [];
+        const errors = validationResult(req);
 
-    next();
-};
+        if (!errors.isEmpty()) {
+            result = errors.array().map((e) => e.msg);
+        }
 
-const validateLogin = async (req, res, next) => {
-    const result = await validate(req, loginValidator);
+        if (result.length > 0) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                messages: result,
+            });
+        }
 
-    if (result.length > 0) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            messages: result,
-        });
-    }
-
-    next();
-};
-
-const validatePassword = async (req, res, next) => {
-    const result = await validate(req, passwordValidator);
-
-    if (result.length > 0) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            messages: result,
-        });
-    }
-
-    next();
-};
-
-const validateShelter = async (req, res, next) => {
-    const result = await validate(req, shelterValidator);
-
-    if (result.length > 0) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            messages: result,
-        });
-    }
-
-    next();
+        next();
+    };
 };
 
 module.exports = {
-    validateRegister,
-    validateLogin,
-    validatePassword,
-    validateShelter,
+    validate,
 };

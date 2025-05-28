@@ -1,12 +1,41 @@
-POST http://localhost:3000/shelter/login
+POST http://localhost:3000/shelter/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTA1MTI3fQ.4LaMDc6M1ZZBvUM7TnxKplIOkm0HNnsKY4E5a7N0MHE
 Content-Type: application/json
 
 {
-    "username": "shelter",
-    "password": "123"
+    "name": "Schronisko Łapka",
+    "city": "Rzeszów 13/22",
+    "number": 999123453,
+    "email": "schronisko.lapka@gmail.com"
 }
 
 ###
 
-GET http://localhost:3000/shelter/info
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF9zaGVsdGVyIjoxLCJuYW1lIjoiU2Nocm9uaXNrbyBkbGEgWndpZXJ6xIV0IiwidXNlcm5hbWUiOiJzaGVsdGVyIiwicGFzc3dvcmQiOiIkMmIkMTAkYUZWY0kxeTE3dTZUeDZWcVhJWjI4ZVhIU0pOaGtabi5RT25rTzRGWnhRa1o4T01YQVQ5ZFciLCJjaXR5IjoiIiwicm9sZSI6InNoZWx0ZXIiLCJpYXQiOjE3NDUzMjUxOTZ9.gOqB_S8FFYKuVetgk4XfPbmUL8gEadlEJCfDWyEKl8A
+GET http://localhost:3000/shelter
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTA1MTI3fQ.4LaMDc6M1ZZBvUM7TnxKplIOkm0HNnsKY4E5a7N0MHE
+
+
+###
+
+POST http://localhost:3000/shelter/assign
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTA1MTI3fQ.4LaMDc6M1ZZBvUM7TnxKplIOkm0HNnsKY4E5a7N0MHE
+Content-Type: application/json
+
+{
+    "id_user": 2,
+    "id_shelter": 1
+}
+
+### 
+PUT http://localhost:3000/shelter/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTA1MTI3fQ.4LaMDc6M1ZZBvUM7TnxKplIOkm0HNnsKY4E5a7N0MHE
+Content-Type: application/json
+
+{
+    "name": "Schronisko Mała Łapka",
+    "city": "Rzeszów 13/22",
+    "number": 999123453,
+    "email": "schronisko.lapka@gmail.com"
+}
+
+

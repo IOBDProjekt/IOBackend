@@ -5,55 +5,27 @@ const jwt = require("jsonwebtoken");
 
 const { StatusCodes } = require("http-status-codes");
 
+const AdminService = require("../services/adminService.js");
+
 const login = async (req, res) => {
-    const admin = {
-        username: req.body.username,
-        password: req.body.password,
-    };
+    const { username, password } = req.body;
 
     try {
-        const [result] = await db.execute(
-            `   
-            SELECT 
-                *
-            FROM 
-                admins a
-            WHERE 
-                a.username = ?;
-            `,
-            [admin.username]
-        );
+        const admin = await AdminService.loginAdmin(username, password);
+        admin.role = "admin";
 
-        if (result.length <= 0)
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "Shelter does not exist" });
-
-        const adminResult = result[0];
-        const authResult = await bcrypt.compare(
-            admin.password,
-            adminResult.password
-        );
-
-        if (!authResult)
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "Invalid password" });
-
-        adminResult.role = "admin";
-        const token = jwt.sign(adminResult, process.env.SECRET_TOKEN, {
+        const token = jwt.sign(admin, process.env.SECRET_TOKEN, {
             expiresIn: "1h",
         });
-
-        // generate test token
-        // const token = jwt.sign(adminResult, process.env.SECRET_TOKEN);
 
         return res.json({
             message: "Successful login",
             token,
         });
     } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            message: error.message,
+        });
     }
 };
 
