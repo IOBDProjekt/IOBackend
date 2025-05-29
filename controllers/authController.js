@@ -97,8 +97,7 @@ const forgotPassword = async (req, res) => {
             process.env.SECRET_TOKEN
         );
 
-        // const registerLink = `https://iofrontend-5tti.onrender.com/complete-register?email=${emailToken}`
-        const registerLink = `http://localhost:3000/reset-password?token=${resetPasswordToken}`;
+        const registerLink = `${process.env.REACT_APP_URL}/reset-password?token=${resetPasswordToken}`;
 
         const emailContentPath = path.join(
             __dirname,
@@ -168,8 +167,7 @@ const emailCheck = async (req, res) => {
                 process.env.SECRET_TOKEN
             );
 
-            // const registerLink = `https://iofrontend-5tti.onrender.com/complete-register?email=${emailToken}`
-            const registerLink = `http://localhost:3000/register?email=${emailToken}`;
+            const registerLink = `${process.env.REACT_APP_URL}/register?email=${emailToken}`;
 
             const emailContentPath = path.join(
                 __dirname,
