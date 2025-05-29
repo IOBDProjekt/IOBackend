@@ -10,7 +10,7 @@ const createUser = async (userData) => {
     });
 
     if (existingUser) {
-        throw new Error("Email already in use");
+        throw new Error("Email jest już w użyciu");
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -28,7 +28,7 @@ const createShelterAccount = async (userData) => {
         },
     });
 
-    if (existingShelterAccount) throw new Error("Email is already in use");
+    if (existingShelterAccount) throw new Error("Email jest już w użyciu");
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     userData.password = hashedPassword;
@@ -45,10 +45,10 @@ const loginUser = async (email, password) => {
         },
     });
 
-    if (!existingUser) throw new Error("User does not exist");
+    if (!existingUser) throw new Error("Nieprawidłowe dane logowania");
 
     const isValid = await bcrypt.compare(password, existingUser.password);
-    if (!isValid) throw new Error("Invalid password");
+    if (!isValid) throw new Error("Nieprawidłowe dane logowania");
 
     return existingUser.toJSON();
 };
@@ -69,10 +69,21 @@ const findUserByEmail = async (email) => {
     });
 
     if (!existingUser) {
-        throw new Error("User does not exists");
+        throw new Error("Wprowadzony adres email nie jest zarejestrowany");
     }
 
     return existingUser.toJSON();
+};
+
+const isEmailTaken = async (email) => {
+    const existingUser = await User.findOne({
+        where: {
+            email: email,
+        },
+    });
+
+    if (existingUser) return true;
+    else return false;
 };
 
 module.exports = {
@@ -81,4 +92,5 @@ module.exports = {
     updateUserPassword,
     findUserByEmail,
     createShelterAccount,
+    isEmailTaken,
 };

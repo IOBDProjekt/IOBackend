@@ -4,6 +4,5 @@ module.exports = [
     body("email")
         .trim()
         .isEmail()
-        .notEmpty()
-        .withMessage("Invalid email provided"),
+        .withMessage("Wprowadzono nieprawidłowy adres email"),
 ];

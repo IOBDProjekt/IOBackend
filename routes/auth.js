@@ -13,6 +13,8 @@ const {
     forgotPassword,
     resetPassword,
     registerShelterAccount,
+    emailCheck,
+    decodeEmail,
 } = require("../controllers/authController.js");
 
 router
@@ -27,6 +29,8 @@ router
     .post("/login", validate("login"), login)
     .get("/me", authenticate, me)
     .post("/forgot-password", validate("email"), forgotPassword)
+    .post("/email-verification", validate("email"), emailCheck)
+    .post("/email", decodeEmail)
     .post("/reset-password", validate("password"), resetPassword);
 
 module.exports = router;

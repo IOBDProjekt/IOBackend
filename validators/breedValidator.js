@@ -1,9 +1,6 @@
 const { body } = require("express-validator");
 
 module.exports = [
-    body("name").trim().notEmpty().withMessage("Empty breed name provided"),
-    body("id_species")
-        .trim()
-        .isNumeric()
-        .withMessage("Invalid species ID provided"),
+    body("name").trim().notEmpty().withMessage("Rasa zwierzęcia jest wymagana"),
+    body("id_species").trim().isNumeric().withMessage("Błędne ID rasy"),
 ];

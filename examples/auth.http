@@ -11,6 +11,24 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:5000/auth/email-verification
+Content-Type: application/json
+
+{
+    "email": "jakub213x@gmail.com"
+}
+
+###
+
+POST http://localhost:5000/auth/email
+Content-Type: application/json
+
+{
+    "emailToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Impha3ViMjEzeEBnbWFpbC5jb20iLCJpYXQiOjE3NDg1MTg4NjF9.5yUqW6D6QiR-izy2uN8k1E9bqt4eOVVPVV1GeR38vfs"
+}
+
+###
+
 POST http://localhost:3000/auth/register-shelter
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoyLCJmaXJzdG5hbWUiOiJQb2xhayIsImxhc3RuYW1lIjoiV2llbGtpIiwiY2l0eSI6IldhZG93aWNlIDIxLzM3IiwiZW1haWwiOiJzaGVsdGVyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEg3bURnSktLeFRiRWNjdHFPeUN5OWVuREFkYnNoRUhOOWVqVW5wMVZic2EvL2lTQ0JXMi9LIiwicm9sZSI6InNoZWx0ZXIiLCJpYXQiOjE3NDgxMDAxNzMsImV4cCI6MTc0ODEwMzc3M30.1x3Dl4E4FML0pne3MS9CJunk715-pqFrZ2fzJ3dKK60
 Content-Type: application/json

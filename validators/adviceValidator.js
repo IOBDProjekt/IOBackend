@@ -1,7 +1,7 @@
 const { body } = require("express-validator");
 
 module.exports = [
-    body("title").notEmpty().withMessage("No title provided"),
-    body("content").notEmpty().withMessage("No content provided"),
-    body("type").notEmpty().withMessage("No type provided"),
+    body("title").notEmpty().withMessage("Tytuł jest wymagany"),
+    body("content").notEmpty().withMessage("Treść jest wymagana"),
+    body("type").notEmpty().withMessage("Nie wybrano typu porady"),
 ];
