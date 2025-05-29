@@ -10,11 +10,13 @@ const {
 	addPet,
 	allPets,
 	changePetData,
+	activePets,
 } = require("../controllers/petController.js");
 
 router
 	.post("/", authenticate, validate("pet"), addPet)
 	.get("/", allPets)
+	.get("/active", activePets)
 	.put("/:id", authenticate, changePetData);
 
 module.exports = router;

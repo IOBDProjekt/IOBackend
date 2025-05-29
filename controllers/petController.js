@@ -42,6 +42,18 @@ const allPets = async (req, res) => {
 	}
 };
 
+const activePets = async (req, res) => {
+	try {
+		const pets = await PetService.getActivePets();
+
+		return res.json({ pets: pets });
+	} catch (error) {
+		return res
+			.status(StatusCodes.INTERNAL_SERVER_ERROR)
+			.json({ message: error.message });
+	}
+};
+
 const changePetData = async (req, res) => {
 	const petData = {
 		name: req.body.name,
@@ -74,4 +86,5 @@ module.exports = {
 	addPet,
 	allPets,
 	changePetData,
+	activePets,
 };

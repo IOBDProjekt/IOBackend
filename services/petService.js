@@ -33,11 +33,29 @@ const getAllPets = async () => {
 	return petsWithTags;
 };
 
+const getActivePets = async () => {
+	const pets = await Pet.findAll({ where: { status: "Do oddania" } });
+
+	const petsWithTags = await Promise.all(
+		pets.map(async (pet) => {
+			const tags = await PetTag.findAll({
+				attributes: ["id_tag"],
+				where: { id_pet: pet.id_pet },
+			});
+
+			pet = pet.toJSON();
+			pet.tags = tags.map((t) => t.id_tag);
+
+			return pet;
+		}),
+	);
+	return petsWithTags;
+};
+
 const changePetData = async (petID, petData) => {
 	const tags = petData.tags;
 	delete petData.tags;
 
-	console.log(tags);
 	if (tags !== undefined) {
 		await PetTag.destroy({ where: { id_pet: petID } });
 		await Promise.all(
@@ -74,4 +92,5 @@ module.exports = {
 	getAllPets,
 	changePetData,
 	getAllPetsByUserID,
+	getActivePets,
 };
