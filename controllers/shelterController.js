@@ -15,13 +15,9 @@ const addShelter = async (req, res) => {
     try {
         const newShelter = await ShelterService.createShelter(shelterData);
 
-        return res
-            .status(StatusCodes.CREATED)
-            .json({ message: "Shelter added successfully", newShelter });
+        return res.status(StatusCodes.CREATED).json({ message: "Pomyślnie dodano schronisko", newShelter });
     } catch (error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
 
@@ -36,18 +32,11 @@ const updateShelter = async (req, res) => {
     const shelterID = req.params.id;
 
     try {
-        const newShelter = await ShelterService.updateShelter(
-            shelterID,
-            shelterData
-        );
+        const newShelter = await ShelterService.updateShelter(shelterID, shelterData);
 
-        return res
-            .status(StatusCodes.CREATED)
-            .json({ message: "Shelter updated successfully", newShelter });
+        return res.status(StatusCodes.CREATED).json({ message: "Shelter updated successfully", newShelter });
     } catch (error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
 
@@ -57,9 +46,7 @@ const allShelters = async (req, res) => {
 
         return res.json({ shelters: shelters });
     } catch (error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
 
@@ -71,9 +58,7 @@ const assignUserToShelter = async (req, res) => {
         await ShelterService.assignUserToShelter(userID, shelterID);
         return res.json({ message: "Successfully assigned user to shelter" });
     } catch (error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
 

@@ -63,10 +63,6 @@ const login = async (req, res) => {
     try {
         const user = await UserService.loginUser(email, password);
 
-        // const token = jwt.sign(user, process.env.SECRET_TOKEN, {
-        //     expiresIn: "1h",
-        // });
-
         const token = jwt.sign(user, process.env.SECRET_TOKEN);
 
         return res.json({
