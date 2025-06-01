@@ -9,15 +9,15 @@ const { StatusCodes } = require("http-status-codes");
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const register = async (req, res) => {
-    const user = {
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-    };
+  const user = {
+    username: req.body.username,
+    password: req.body.password,
+    email: req.body.email,
+  };
 
-    try {
-        const [result] = await db.execute(
-            `   
+  try {
+    const [result] = await db.execute(
+      `   
             SELECT 
                 u.id_user 
             FROM 
@@ -26,38 +26,38 @@ const register = async (req, res) => {
                 u.username = ? OR 
                 u.email = ?;
             `,
-            [user.username, user.email]
-        );
+      [user.username, user.email]
+    );
 
-        if (result.length > 0)
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "User already exists" });
+    if (result.length > 0)
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "User already exists" });
 
-        const hashedPassword = await bcrypt.hash(user.password, 10);
-        const [insertResult] = await db.execute(
-            `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
-            [user.username, user.email, hashedPassword]
-        );
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const [insertResult] = await db.execute(
+      `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
+      [user.username, user.email, hashedPassword]
+    );
 
-        return res.status(StatusCodes.CREATED).json({
-            message: "User created successfully",
-            body: insertResult,
-        });
-    } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
-    }
+    return res.status(StatusCodes.CREATED).json({
+      message: "User created successfully",
+      body: insertResult,
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+  }
 };
 
 const login = async (req, res) => {
-    const user = {
-        username: req.body.username,
-        password: req.body.password,
-    };
+  const user = {
+    username: req.body.username,
+    password: req.body.password,
+  };
 
-    try {
-        const [result] = await db.execute(
-            `   
+  try {
+    const [result] = await db.execute(
+      `   
             SELECT 
                 *
             FROM 
@@ -65,78 +65,74 @@ const login = async (req, res) => {
             WHERE 
                 u.username = ?;
             `,
-            [user.username]
-        );
+      [user.username]
+    );
 
-        if (result.length <= 0)
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "User does not exists" });
+    if (result.length <= 0)
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "User does not exists" });
 
-        const userResult = result[0];
-        const authResult = await bcrypt.compare(
-            user.password,
-            userResult.password
-        );
+    const userResult = result[0];
+    const authResult = await bcrypt.compare(user.password, userResult.password);
 
-        if (!authResult)
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "Invalid password" });
+    if (!authResult)
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: "Invalid password" });
 
-        userResult.role = "user";
-        const token = jwt.sign(userResult, process.env.SECRET_TOKEN, {
-            expiresIn: "1h",
-        });
+    userResult.role = "user";
+    const token = jwt.sign(userResult, process.env.SECRET_TOKEN, {
+      expiresIn: "1h",
+    });
 
-        // generate test token
-        // const token = jwt.sign(userResult, process.env.SECRET_TOKEN);
+    // generate test token
+    // const token = jwt.sign(userResult, process.env.SECRET_TOKEN);
 
-        return res.json({
-            message: "Successful login",
-            token,
-        });
-    } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
-    }
+    return res.json({
+      message: "Successful login",
+      token,
+    });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+  }
 };
 
 const me = (req, res) => {
-    res.json(req.authData);
+  res.json(req.authData);
 };
 
 const forgotPassword = async (req, res) => {
-    const email = req.body.email;
+  const email = req.body.email;
 
-    if (!email) {
-        return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ message: "Email is required" });
+  if (!email) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Email is required" });
+  }
+
+  try {
+    const [result] = await db.execute("SELECT * FROM users WHERE email = ?;", [
+      email,
+    ]);
+
+    if (result.length <= 0) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        message: "User does not exist",
+      });
     }
 
-    try {
-        const [result] = await db.execute(
-            "SELECT * FROM users WHERE email = ?;",
-            [email]
-        );
+    const userID = result[0].id_user;
 
-        if (result.length <= 0) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                message: "User does not exist",
-            });
-        }
+    const token = jwt.sign({ id_user: userID }, process.env.SECRET_TOKEN, {
+      expiresIn: "15m",
+    });
 
-        const userID = result[0].id_user;
-
-        const token = jwt.sign({ id_user: userID }, process.env.SECRET_TOKEN, {
-            expiresIn: "15m",
-        });
-
-        resend.emails.send({
-            from: "passwordreset@resend.dev",
-            to: "jakub213x@gmail.com",
-            subject: "Password Reset",
-            html: `
+    resend.emails.send({
+      from: "passwordreset@resend.dev",
+      to: "jakub213x@gmail.com",
+      subject: "Password Reset",
+      html: `
             <!DOCTYPE html>
                 <html>
                 <head>
@@ -184,57 +180,57 @@ const forgotPassword = async (req, res) => {
                     </table>
                 </body>
                 </html>`,
-        });
+    });
 
-        res.status(StatusCodes.OK).json({
-            message: "Email send",
-        });
-    } catch (err) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-            message: "Error",
-            body: err,
-        });
-    }
+    res.status(StatusCodes.OK).json({
+      message: "Email send",
+    });
+  } catch (err) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: "Error",
+      body: err,
+    });
+  }
 };
 
 const resetPassword = async (req, res) => {
-    const resetToken = req.body.token;
-    const password = req.body.password;
+  const resetToken = req.body.token;
+  const password = req.body.password;
 
-    if (!resetToken)
-        return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ message: "Invalid token" });
+  if (!resetToken)
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ message: "Invalid token" });
 
-    try {
-        const data = jwt.verify(resetToken, process.env.SECRET_TOKEN);
-        const userId = data.id_user;
+  try {
+    const data = jwt.verify(resetToken, process.env.SECRET_TOKEN);
+    const userId = data.id_user;
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        const [result] = await db.execute(
-            `
+    const [result] = await db.execute(
+      `
                 UPDATE users
                 SET password = ?
                 WHERE id_user = ?
             `,
-            [hashedPassword, userId]
-        );
+      [hashedPassword, userId]
+    );
 
-        return res.status(StatusCodes.OK).json({
-            message: "Password updated successfully",
-        });
-    } catch (error) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-            message: error.message,
-        });
-    }
+    return res.status(StatusCodes.OK).json({
+      message: "Password updated successfully",
+    });
+  } catch (error) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: error.message,
+    });
+  }
 };
 
 module.exports = {
-    register,
-    login,
-    me,
-    forgotPassword,
-    resetPassword,
+  register,
+  login,
+  me,
+  forgotPassword,
+  resetPassword,
 };
