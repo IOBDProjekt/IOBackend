@@ -34,7 +34,7 @@ const updateShelter = async (req, res) => {
     try {
         const newShelter = await ShelterService.updateShelter(shelterID, shelterData);
 
-        return res.status(StatusCodes.CREATED).json({ message: "Shelter updated successfully", newShelter });
+        return res.status(StatusCodes.CREATED).json({ message: "Pomyślnie zapisano zmiany", newShelter });
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
@@ -56,7 +56,7 @@ const assignUserToShelter = async (req, res) => {
 
     try {
         await ShelterService.assignUserToShelter(userID, shelterID);
-        return res.json({ message: "Successfully assigned user to shelter" });
+        return res.json({ message: "Pomyślnie przypisano konto do schroniska" });
     } catch (error) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }

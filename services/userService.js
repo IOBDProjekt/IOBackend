@@ -55,10 +55,7 @@ const loginUser = async (email, password) => {
 
 const updateUserPassword = async (userID, newPassword) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await User.update(
-        { password: hashedPassword },
-        { where: { id_user: userID } }
-    );
+    await User.update({ password: hashedPassword }, { where: { id_user: userID } });
 };
 
 const findUserByEmail = async (email) => {
@@ -86,6 +83,21 @@ const isEmailTaken = async (email) => {
     else return false;
 };
 
+const findUserByRole = async (role) => {
+    const users = await User.findAll({
+        where: {
+            role: role,
+        },
+    });
+
+    return users;
+};
+
+const updateUser = async (userID, userData) => {
+    userData.password = undefined;
+    await User.update(userData, { where: { id_user: userID } });
+};
+
 module.exports = {
     createUser,
     loginUser,
@@ -93,4 +105,6 @@ module.exports = {
     findUserByEmail,
     createShelterAccount,
     isEmailTaken,
+    findUserByRole,
+    updateUser,
 };

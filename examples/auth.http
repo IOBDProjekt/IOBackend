@@ -75,3 +75,24 @@ Content-Type: application/json
     "password": "1234",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJpYXQiOjE3NDc1ODE0MDQsImV4cCI6MTc0NzU4MjMwNH0.O-CiE01CPTC-BUkAp3R4dg7433xe36RKqRqJwm4fid0"
 }
+
+###
+
+GET http://localhost:5000/auth/shelter-accounts
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4NjgyOTY5fQ.Bx_7B0GDpr20tWpvP1R00FzxTG5gWzvtipotY8ZRu-w
+
+###
+
+PUT http://localhost:5000/auth/shelter-accounts/6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4NjgyOTY5fQ.Bx_7B0GDpr20tWpvP1R00FzxTG5gWzvtipotY8ZRu-w
+
+{
+    "firstname": "Jacek",
+    "lastname": "Placekk",
+    "email": "wa@wp.pl",
+    "city": "Poznań"
+}
+
+###

@@ -22,13 +22,9 @@ const register = async (req, res) => {
     try {
         const newUser = await UserService.createUser(userData);
 
-        return res
-            .status(StatusCodes.CREATED)
-            .json({ message: "User created successfully", user: newUser });
+        return res.status(StatusCodes.CREATED).json({ message: "User created successfully", user: newUser });
     } catch (error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
 
@@ -43,17 +39,14 @@ const registerShelterAccount = async (req, res) => {
     };
 
     try {
-        const newShelterAccount =
-            await UserService.createShelterAccount(userData);
+        const newShelterAccount = await UserService.createShelterAccount(userData);
 
         return res.status(StatusCodes.CREATED).json({
             message: "Shelter account created successfully",
             user: newShelterAccount,
         });
     } catch (error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
 
@@ -88,17 +81,11 @@ const forgotPassword = async (req, res) => {
 
         const userID = user.id_user;
 
-        const resetPasswordToken = jwt.sign(
-            { id_user: userID },
-            process.env.SECRET_TOKEN
-        );
+        const resetPasswordToken = jwt.sign({ id_user: userID }, process.env.SECRET_TOKEN);
 
         const registerLink = `${process.env.REACT_APP_URL}/reset-password?token=${resetPasswordToken}`;
 
-        const emailContentPath = path.join(
-            __dirname,
-            "../emails/forgotPasswordEmail.html"
-        );
+        const emailContentPath = path.join(__dirname, "../emails/forgotPasswordEmail.html");
 
         const emailContent = fs.readFileSync(emailContentPath, "utf-8");
         const emailHTML = emailContent.replace("{{LINK}}", registerLink);
@@ -116,9 +103,7 @@ const forgotPassword = async (req, res) => {
             message: "Wiadmość email została pomyślnie wysłana",
         });
     } catch (error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
 
@@ -126,10 +111,7 @@ const resetPassword = async (req, res) => {
     const resetToken = req.body.token;
     const password = req.body.password;
 
-    if (!resetToken)
-        return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ message: "Niepoprawny token" });
+    if (!resetToken) return res.status(StatusCodes.BAD_REQUEST).json({ message: "Niepoprawny token" });
 
     try {
         const data = jwt.verify(resetToken, process.env.SECRET_TOKEN);
@@ -154,21 +136,13 @@ const emailCheck = async (req, res) => {
         const emailExists = await UserService.isEmailTaken(email);
 
         if (emailExists) {
-            return res
-                .status(StatusCodes.BAD_REQUEST)
-                .json({ message: "Email jest już w użyciu" });
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: "Email jest już w użyciu" });
         } else {
-            const emailToken = await jwt.sign(
-                { email: email },
-                process.env.SECRET_TOKEN
-            );
+            const emailToken = await jwt.sign({ email: email }, process.env.SECRET_TOKEN);
 
             const registerLink = `${process.env.REACT_APP_URL}/register?email=${emailToken}`;
 
-            const emailContentPath = path.join(
-                __dirname,
-                "../emails/createAccountEmail.html"
-            );
+            const emailContentPath = path.join(__dirname, "../emails/createAccountEmail.html");
 
             const emailContent = fs.readFileSync(emailContentPath, "utf-8");
             const emailHTML = emailContent.replace("{{LINK}}", registerLink);
@@ -187,9 +161,7 @@ const emailCheck = async (req, res) => {
             });
         }
     } catch (error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
 
@@ -208,6 +180,34 @@ const decodeEmail = async (req, res) => {
     }
 };
 
+const getAllShelterAccounts = async (req, res) => {
+    try {
+        const shelterAccounts = await UserService.findUserByRole("shelter");
+
+        return res.json({ shelterAccounts: shelterAccounts });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
+};
+
+const updateShelterAccount = async (req, res) => {
+    const userID = req.params.id;
+    const userData = {
+        firstname: req.body["firstname"],
+        lastname: req.body["lastname"],
+        city: req.body["city"],
+        email: req.body["email"],
+    };
+
+    try {
+        const account = await UserService.updateUser(userID, userData);
+
+        return res.json({ message: "Pomyślnie zaktualizowano informacje" });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
+};
+
 module.exports = {
     register,
     login,
@@ -217,4 +217,6 @@ module.exports = {
     registerShelterAccount,
     emailCheck,
     decodeEmail,
+    getAllShelterAccounts,
+    updateShelterAccount,
 };
