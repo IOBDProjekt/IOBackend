@@ -1,0 +1,43 @@
+POST http://localhost:3000/pet/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTA1MTI3fQ.4LaMDc6M1ZZBvUM7TnxKplIOkm0HNnsKY4E5a7N0MHE
+Content-Type: application/json
+
+{
+    "name": "Azor",
+    "id_species": 2,
+    "id_breed": 3,
+    "age": "3-5",
+    "sex": "Samiec",
+    "condition": "Dobry",
+    "status": "Do oddania",
+    "id_shelter": 1,
+    "tagIDs": [1,2]
+}
+
+###
+
+GET http://localhost:3000/pet/
+
+###
+
+GET http://localhost:3000/pet/active
+
+###
+
+PUT http://localhost:3000/pet/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJmaXJzdG5hbWUiOiJ4IiwibGFzdG5hbWUiOiJ4IiwiY2l0eSI6IngiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEpFVzJ1bTNpejBBbUl1dkNGV1FmUk93aElpSXNrTlVPRzU2QVpEYTF2QUFIRkJCcUxwa1g2Iiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ4MTA1MTI3fQ.4LaMDc6M1ZZBvUM7TnxKplIOkm0HNnsKY4E5a7N0MHE
+Content-Type: application/json
+
+{
+    "name": "Pimpek",
+    "id_species": 2,
+    "id_breed": 3,
+    "age": "3-5",
+    "sex": "Samiec",
+    "condition": "Dobry",
+    "status": "Oddany",
+    "id_shelter": 1,
+    "tagIDs": [1,3]
+}
+
+###

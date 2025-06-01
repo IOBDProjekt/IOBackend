@@ -1,19 +1,28 @@
 const express = require("express");
 const router = express.Router();
 
-const { authenticate } = require("../middleware/authenticate.js");
-const { validateLogin } = require("../middleware/validate.js");
 const {
-	login,
-	info,
-	listing,
-	listings,
-	breeds,
-	species,
+    authenticate,
+    authorizeRole,
+} = require("../middleware/authenticate.js");
+const { validate } = require("../middleware/validate.js");
+const {
+    addShelter,
+    updateShelter,
+    allShelters,
+    assignUserToShelter,
 } = require("../controllers/shelterController.js");
 
-router.post("/login", validateLogin, login).get("/info", authenticate, info);
-router.post("/listing", listing).get("/listings", listings);
-router.get("/breeds", breeds).get("/species", species);
+router
+    .post(
+        "/",
+        authenticate,
+        authorizeRole("admin"),
+        validate("shelter"),
+        addShelter
+    )
+    .put("/:id", authenticate, authorizeRole("admin"), updateShelter)
+    .get("/", authenticate, authorizeRole("admin"), allShelters)
+    .post("/assign", authenticate, authorizeRole("admin"), assignUserToShelter);
 
 module.exports = router;
