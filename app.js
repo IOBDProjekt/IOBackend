@@ -9,12 +9,12 @@ require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 
 app.use(
-	cors({
-		origin: "*",
-		methods: ["GET", "POST", "PUT", "DELETE"],
-		allowedHeaders: ["Content-Type", "Authorization"],
-		credentials: true,
-	}),
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
 );
 
 // Database Debugging
@@ -30,5 +30,6 @@ app.use("/species", require("./routes/species"));
 app.use("/breed", require("./routes/breed"));
 app.use("/pet", require("./routes/pet"));
 app.use("/tag", require("./routes/tag"));
+app.use("/email", require("./routes/email"));
 
 app.listen(PORT, () => console.log(`App is running on port ${PORT}`));

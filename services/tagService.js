@@ -31,14 +31,18 @@ const updateTag = async (tagID, newName) => {
     });
 
     if (existingTag) throw new Error("Tag exist");
-    
-    await Tag.update(
-        { character: newName },
-        { where: { id_tag: tagID } }
-    );
+
+    await Tag.update({ character: newName }, { where: { id_tag: tagID } });
+};
+
+const getAllTags = async () => {
+    const tags = await Tag.findAll();
+
+    return tags;
 };
 
 module.exports = {
     createTag,
-    updateTag
+    updateTag,
+    getAllTags,
 };
