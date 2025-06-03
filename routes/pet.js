@@ -18,9 +18,9 @@ const {
 router
 	.post("/", authenticate, validate("pet"), addPet)
 	.get("/", allPets)
-	.get("/:id", getPetByID)
-	.get("/shelter/:id", getAllPetsByUserID)
+	.get("/one/:id", getPetByID)
 	.get("/active", activePets)
+	.get("/shelter/:id", getAllPetsByUserID)
 	.put("/:id", authenticate, changePetData);
 
 module.exports = router;
