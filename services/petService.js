@@ -1,4 +1,4 @@
-const { Pet, PetTag, Tag, Species, Breed } = require("../models");
+const { Pet, PetTag, Tag, Species, Shelter, Breed } = require("../models");
 const ShelterService = require("./shelterService");
 
 const createPet = async (petData) => {
@@ -18,6 +18,7 @@ const getAllPets = async () => {
 		include: [
 			{ model: Species, as: "species", attributes: ["name"] },
 			{ model: Breed, as: "breed", attributes: ["name"] },
+			{ model: Shelter, as: "shelter", attributes: ["name"] },
 			{
 				model: Tag,
 				as: "tags",
@@ -36,6 +37,7 @@ const getByID = async (petID) => {
 		include: [
 			{ model: Species, as: "species", attributes: ["name"] },
 			{ model: Breed, as: "breed", attributes: ["name"] },
+			{ model: Shelter, as: "shelter", attributes: ["name"] },
 			{
 				model: Tag,
 				as: "tags",
@@ -53,6 +55,7 @@ const getActivePets = async () => {
 		include: [
 			{ model: Species, as: "species", attributes: ["name"] },
 			{ model: Breed, as: "breed", attributes: ["name"] },
+			{ model: Shelter, as: "shelter", attributes: ["name"] },
 			{
 				model: Tag,
 				as: "tags",
@@ -87,6 +90,7 @@ const getAllPetsByUserID = async (userID) => {
 		include: [
 			{ model: Species, as: "species", attributes: ["name"] },
 			{ model: Breed, as: "breed", attributes: ["name"] },
+			{ model: Shelter, as: "shelter", attributes: ["name"] },
 			{
 				model: Tag,
 				as: "tags",
