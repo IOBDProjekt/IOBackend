@@ -41,7 +41,29 @@ const allPets = async (req, res) => {
 			.json({ message: error.message });
 	}
 };
+const getAllPetsByUserID = async (req, res) => {
+	try {
+		const userID = req.params.id;
+		const pets = await PetService.getAllPetsByUserID(userID);
+		return res.json({ pets: pets });
+	} catch (error) {
+		return res
+			.status(StatusCodes.INTERNAL_SERVER_ERROR)
+			.json({ message: error.message });
+	}
+};
 
+const getPetByID = async (req, res) => {
+	try {
+		const petID = req.params.id;
+		const pets = await PetService.getByID(petID);
+		return res.json({ pets: pets });
+	} catch (error) {
+		return res
+			.status(StatusCodes.INTERNAL_SERVER_ERROR)
+			.json({ message: error.message });
+	}
+};
 const activePets = async (req, res) => {
 	try {
 		const pets = await PetService.getActivePets();
@@ -87,4 +109,6 @@ module.exports = {
 	allPets,
 	changePetData,
 	activePets,
+	getAllPetsByUserID,
+	getPetByID,
 };

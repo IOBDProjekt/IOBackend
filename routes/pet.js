@@ -11,11 +11,15 @@ const {
 	allPets,
 	changePetData,
 	activePets,
+	getAllPetsByUserID,
+	getPetByID,
 } = require("../controllers/petController.js");
 
 router
 	.post("/", authenticate, validate("pet"), addPet)
 	.get("/", allPets)
+	.get("/:id", getPetByID)
+	.get("/shelter/:id", getAllPetsByUserID)
 	.get("/active", activePets)
 	.put("/:id", authenticate, changePetData);
 

@@ -1,6 +1,5 @@
-const { Pet } = require("../models");
-const { PetTag } = require("../models");
-const { ShelterService } = require("./shelterService");
+const { Pet, PetTag, Tag, Species, Breed } = require("../models");
+const ShelterService = require("./shelterService");
 
 const createPet = async (petData) => {
 	const tags = petData.tags;
@@ -15,41 +14,55 @@ const createPet = async (petData) => {
 };
 
 const getAllPets = async () => {
-	const pets = await Pet.findAll();
+	const pets = await Pet.findAll({
+		include: [
+			{ model: Species, as: "species", attributes: ["name"] },
+			{ model: Breed, as: "breed", attributes: ["name"] },
+			{
+				model: Tag,
+				as: "tags",
+				attributes: ["character"],
+				through: { attributes: [] },
+			},
+		],
+	});
 
-	const petsWithTags = await Promise.all(
-		pets.map(async (pet) => {
-			const tags = await PetTag.findAll({
-				attributes: ["id_tag"],
-				where: { id_pet: pet.id_pet },
-			});
+	return pets;
+};
 
-			pet = pet.toJSON();
-			pet.tags = tags.map((t) => t.id_tag);
-
-			return pet;
-		}),
-	);
-	return petsWithTags;
+const getByID = async (petID) => {
+	const pets = await Pet.findAll({
+		where: { id_pet: petID },
+		include: [
+			{ model: Species, as: "species", attributes: ["name"] },
+			{ model: Breed, as: "breed", attributes: ["name"] },
+			{
+				model: Tag,
+				as: "tags",
+				attributes: ["character"],
+				through: { attributes: [] },
+			},
+		],
+	});
+	return pets;
 };
 
 const getActivePets = async () => {
-	const pets = await Pet.findAll({ where: { status: "Do oddania" } });
+	const pets = await Pet.findAll({
+		where: { status: "Do oddania" },
+		include: [
+			{ model: Species, as: "species", attributes: ["name"] },
+			{ model: Breed, as: "breed", attributes: ["name"] },
+			{
+				model: Tag,
+				as: "tags",
+				attributes: ["character"],
+				through: { attributes: [] },
+			},
+		],
+	});
 
-	const petsWithTags = await Promise.all(
-		pets.map(async (pet) => {
-			const tags = await PetTag.findAll({
-				attributes: ["id_tag"],
-				where: { id_pet: pet.id_pet },
-			});
-
-			pet = pet.toJSON();
-			pet.tags = tags.map((t) => t.id_tag);
-
-			return pet;
-		}),
-	);
-	return petsWithTags;
+	return pets;
 };
 
 const changePetData = async (petID, petData) => {
@@ -68,23 +81,21 @@ const changePetData = async (petID, petData) => {
 };
 
 const getAllPetsByUserID = async (userID) => {
-	const shelterID = await ShelterService.getShetlerIdByUserID(userID);
-	const pets = await Pet.findAll({ where: { id_shelter: shelterID } });
-
-	const petsWithTags = await Promise.all(
-		pets.map(async (pet) => {
-			const tags = await PetTag.findAll({
-				attributes: ["id_tag"],
-				where: { id_pet: pet.id_pet },
-			});
-
-			pet = pet.toJSON();
-			pet.tags = tags.map((t) => t.id_tag);
-
-			return pet;
-		}),
-	);
-	return petsWithTags;
+	const shelterID = await ShelterService.getShelterIdByUserID(userID);
+	const pets = await Pet.findAll({
+		where: { id_shelter: shelterID },
+		include: [
+			{ model: Species, as: "species", attributes: ["name"] },
+			{ model: Breed, as: "breed", attributes: ["name"] },
+			{
+				model: Tag,
+				as: "tags",
+				attributes: ["character"],
+				through: { attributes: [] },
+			},
+		],
+	});
+	return pets;
 };
 
 module.exports = {
@@ -93,4 +104,5 @@ module.exports = {
 	changePetData,
 	getAllPetsByUserID,
 	getActivePets,
+	getByID,
 };
