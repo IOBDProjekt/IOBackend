@@ -18,8 +18,8 @@ const {
 router
 	.post("/", authenticate, validate("pet"), addPet)
 	.get("/", allPets)
-	.get("/one/:id", getPetByID)
 	.get("/active", activePets)
+	.get("/:id", getPetByID)
 	.get("/shelter/:id", getAllPetsByUserID)
 	.put("/:id", authenticate, changePetData);
 
