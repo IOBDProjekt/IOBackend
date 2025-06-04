@@ -8,6 +8,26 @@ const createAdvice = async (adviceData) => {
     return advice.toJSON();
 };
 
+const getAllAdvices = async (shelterId) => {
+    const advices = await Advice.findAll({
+        where: { id_shelter: shelterId }
+    });
+    return advices.map(a => a.toJSON());
+};
+
+const getAdviceById = async (adviceId, shelterId) => {
+    const advice = await Advice.findOne({
+        where: {
+            id_advice: adviceId,
+            id_shelter: shelterId
+        }
+    });
+    if (!advice) {
+        throw new Error("No advice with that ID or not yours!");
+    }
+    return advice.toJSON();
+};
+
 const updateAdviceTitle = async (adviceData) => {
     const adviceToUpdate = await Advice.findByPk(adviceData.id_advice);
     if (!adviceToUpdate) {
@@ -54,6 +74,8 @@ const updateAdviceContent = async ( adviceData ) => {
 
 module.exports = {
     createAdvice,
+    getAllAdvices,
+    getAdviceById, 
     updateAdviceTitle,
     updateAdviceContent,
 };
