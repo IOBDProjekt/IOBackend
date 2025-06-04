@@ -64,7 +64,37 @@ const updateAdvice = async (req, res) => {
 
 }
 
+const getAdvices = async (req, res) => {
+    try {
+        const shelterID = await ShelterService.getShelterIdByUserID(req.authData.id_user);
+        const advices = await AdviceService.getAllAdvices(shelterID);
+        return res
+            .status(StatusCodes.OK)
+            .json({ advices });
+    } catch (error) {
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: error.message });
+    }
+};
+
+const getAdvice = async (req, res) => {
+    try {
+        const shelterID = await ShelterService.getShelterIdByUserID(req.authData.id_user);
+        const advice = await AdviceService.getAdviceById(req.params.id, shelterID);
+        return res
+            .status(StatusCodes.OK)
+            .json({ advice });
+    } catch (error) {
+        return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: error.message });
+    }
+};
+
 module.exports = {
     addAdvice,
     updateAdvice,
+    getAdvices,  
+    getAdvice, 
 };
