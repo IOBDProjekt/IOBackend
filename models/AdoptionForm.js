@@ -2,32 +2,25 @@ const { DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../database");
 
 const AdoptionForm = sequelize.define(
-	"AdoptionForm",
-	{
-		id_adoptionForm: {
-			type: DataTypes.INTEGER,
-			autoIncrement: true,
-			primaryKey: true,
-			allowNull: false,
-			unique: true,
-		},
-		submittedAt: {
-			type: DataTypes.DATE,
-			allowNull: false,
-            defaultValue: Sequelize.NOW
-		},
-        workerComment: {
-			type: DataTypes.TEXT,
-			allowNull: true,
-		},
-		id_pet: {
+    "AdoptionForm",
+    {
+        id_aform: {
             type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
             allowNull: false,
-            references: {
-                model: "pets",
-                key: "id_pet",
-            },
-            onDelete: "RESTRICT",
+            unique: true,
+        },
+        pesel: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        motivation: {
+            type: DataTypes.STRING,
+        },
+        status: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
         id_user: {
             type: DataTypes.INTEGER,
@@ -36,19 +29,26 @@ const AdoptionForm = sequelize.define(
                 model: "users",
                 key: "id_user",
             },
-            onDelete: "RESTRICT",
         },
-	},
-	{
-		tableName: "adoptionForms",
-		timestamps: false,
-	},
+        id_pet: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "pets",
+                key: "id_pet",
+            },
+            onDelete: "NO ACTION",
+        },
+    },
+    {
+        tableName: "adoption_forms",
+        timestamps: false,
+    }
 );
 
 AdoptionForm.associate = (models) => {
-    AdoptionForm.belongsTo(models.User, { foreignKey: "id_user", as: "user" });
+    AdoptionForm.belongsTo(models.User, { foreignKey: "id_user", as: "adopter" });
     AdoptionForm.belongsTo(models.Pet, { foreignKey: "id_pet", as: "pet" });
-    AdoptionForm.hasMany(models.Notification, { foreignKey: "id_adoptionForm", as: "notifications" })
-  };
+};
 
 module.exports = AdoptionForm;

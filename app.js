@@ -13,16 +13,16 @@ require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 
 app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
+    cors({
+        origin: "*",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+    })
 );
 
 // Database Debugging
-// db.sequelize.sync({ alter: true });
+// db.sequelize.sync({ alter: false });
 
 app.use(express.json());
 app.use("/auth", require("./routes/auth"));
@@ -36,6 +36,7 @@ app.use("/pet", require("./routes/pet"));
 app.use("/tag", require("./routes/tag"));
 app.use("/email", require("./routes/email"));
 app.use("/message", require("./routes/messages"));
+app.use("/adoption", require("./routes/adoptionForm"));
 
 server.listen(PORT, () => console.log(`App is running on port ${PORT}`));
 
@@ -45,38 +46,38 @@ const wss = new WebSocket.Server({ server });
 const clients = new Map();
 
 wss.on("connection", (ws) => {
-  ws.on("message", (message) => {
-    try {
-      const data = JSON.parse(message);
-      const { type, userId, toUserId, content, id_pet } = data;
+    ws.on("message", (message) => {
+        try {
+            const data = JSON.parse(message);
+            const { type, userId, toUserId, content, id_pet } = data;
 
-      if (type === "init") {
-        clients.set(userId, ws);
-        ws.userId = userId;
-        console.log(`User ${userId} connected`);
-      }
+            if (type === "init") {
+                clients.set(userId, ws);
+                ws.userId = userId;
+                console.log(`User ${userId} connected`);
+            }
 
-      if (type === "message") {
-        const receiverSocket = clients.get(toUserId);
-        if (receiverSocket && receiverSocket.readyState === WebSocket.OPEN) {
-          receiverSocket.send(JSON.stringify({
-            type: "new_message",
-            fromUserId: userId,
-            content,
-            id_pet
-          }));
+            if (type === "message") {
+                const receiverSocket = clients.get(toUserId);
+                if (receiverSocket && receiverSocket.readyState === WebSocket.OPEN) {
+                    receiverSocket.send(
+                        JSON.stringify({
+                            type: "new_message",
+                            fromUserId: userId,
+                            content,
+                            id_pet,
+                        })
+                    );
+                }
+            }
+        } catch (err) {
+            console.error("WebSocket error: ", err);
         }
-      }
-    } catch (err) {
-      console.error("WebSocket error: ", err);
-    }
-  });
+    });
 
-  ws.on("close", () => {
-    if (ws.userId) {
-      clients.delete(ws.userId);
-    }
-  });
-}
-
-); 
+    ws.on("close", () => {
+        if (ws.userId) {
+            clients.delete(ws.userId);
+        }
+    });
+});
