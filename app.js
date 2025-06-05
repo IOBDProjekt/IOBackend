@@ -27,7 +27,7 @@ app.use(
 
 app.use(express.json());
 app.use("/auth", require("./routes/auth"));
-app.use("/image", require("./routes/sendImage"));
+app.use("/image", require("./routes/image"));
 app.use("/shelter", require("./routes/shelter"));
 app.use("/advice", require("./routes/advice"));
 app.use("/favourite", require("./routes/favourite"));
