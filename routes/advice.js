@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 const { addAdvice, updateAdvice, getAdvice, getAllAdvices, getShelterAdvices } = require("../controllers/adviceController");
 const { authenticate, authorizeRole } = require("../middleware/authenticate");
 const { validate } = require("../middleware/validate.js");
