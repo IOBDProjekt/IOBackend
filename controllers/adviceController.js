@@ -64,10 +64,10 @@ const updateAdvice = async (req, res) => {
 
 }
 
-const getAdvices = async (req, res) => {
+const getShelterAdvices = async (req, res) => {
     try {
         const shelterID = await ShelterService.getShelterIdByUserID(req.authData.id_user);
-        const advices = await AdviceService.getAllAdvices(shelterID);
+        const advices = await AdviceService.getAllShelterAdvices(shelterID);
         return res
             .status(StatusCodes.OK)
             .json({ advices });
@@ -77,6 +77,19 @@ const getAdvices = async (req, res) => {
             .json({ message: error.message });
     }
 };
+
+const getAllAdvices = async (req, res) => {
+    try {
+        const advices = await AdviceService.getAllAdvices();
+        return res
+            .status(StatusCodes.OK)
+            .json({ advices });
+    } catch (error) {
+        return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: error.message });
+    }
+}
 
 const getAdvice = async (req, res) => {
     try {
@@ -95,6 +108,7 @@ const getAdvice = async (req, res) => {
 module.exports = {
     addAdvice,
     updateAdvice,
-    getAdvices,  
-    getAdvice, 
+    getShelterAdvices,  
+    getAdvice,
+    getAllAdvices,
 };

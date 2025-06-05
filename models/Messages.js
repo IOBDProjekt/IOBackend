@@ -34,8 +34,16 @@ const Messages = sequelize.define(
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
         },
-        
+        id_pet: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'pets',
+            key: 'id_pet',
+        },
+        },
     },
+    
     {
         tableName: "messages",
         timestamps: false,
@@ -50,6 +58,10 @@ Messages.associate = (models) => {
     Messages.belongsTo(models.User, {
       foreignKey: 'id_receiver',
       as: 'receiver',
+    });
+    Messages.belongsTo(models.Pet, {
+      foreignKey: 'id_pet',
+      as: 'messagePet',
     });
 };
 
