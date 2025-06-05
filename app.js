@@ -37,6 +37,7 @@ app.use("/tag", require("./routes/tag"));
 app.use("/email", require("./routes/email"));
 app.use("/message", require("./routes/messages"));
 app.use("/adoption", require("./routes/adoptionForm"));
+app.use("/application", require("./routes/application"));
 
 server.listen(PORT, () => console.log(`App is running on port ${PORT}`));
 
