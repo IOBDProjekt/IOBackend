@@ -23,6 +23,7 @@ app.use(
 
 // Database Debugging
 // db.sequelize.sync({ alter: true });
+// db.sequelize.sync();
 
 app.use(express.json());
 app.use("/auth", require("./routes/auth"));
@@ -36,6 +37,7 @@ app.use("/pet", require("./routes/pet"));
 app.use("/tag", require("./routes/tag"));
 app.use("/email", require("./routes/email"));
 app.use("/message", require("./routes/messages"));
+app.use("/application", require("./routes/application"));
 
 server.listen(PORT, () => console.log(`App is running on port ${PORT}`));
 
