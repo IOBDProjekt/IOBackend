@@ -8,7 +8,7 @@ const { addShelter, updateShelter, allShelters, assignUserToShelter } = require(
 router
     .post("/", authenticate, authorizeRole("admin"), validate("shelter"), addShelter)
     .put("/:id", authenticate, authorizeRole("admin"), validate("shelter"), updateShelter)
-    .get("/", authenticate, authorizeRole("admin"), allShelters)
+    .get("/", allShelters)
     .post("/assign", authenticate, authorizeRole("admin"), assignUserToShelter);
 
 module.exports = router;
