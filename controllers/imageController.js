@@ -2,7 +2,11 @@ const { StatusCodes } = require("http-status-codes");
 const ImageService = require("../services/imageService.js");
 
 const addNewImage = async (req, res) => {
-	if (!req.file) res.status(StatusCodes.BAD_REQUEST).send("No file uploaded.");
+	if (!req.file) {
+		return res
+			.status(StatusCodes.BAD_REQUEST)
+			.json({ message: "No file uploaded." });
+	}
 
 	const imageData = {
 		name: req.file.originalname,
@@ -13,17 +17,26 @@ const addNewImage = async (req, res) => {
 	};
 
 	try {
-		await ImageService.createImage(imageData);
+		const savedImage = await ImageService.createImage(imageData);
+
 		return res.status(StatusCodes.CREATED).json({
+			id_image: savedImage.id_image,
 			message: "Image uploaded successfully",
 		});
 	} catch (error) {
-		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+		console.error("Błąd przy tworzeniu obrazka:", error);
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			message: error.message || "Server error while creating image",
+		});
 	}
 };
 
 const changeImageData = async (req, res) => {
-	if (!req.file) res.status(StatusCodes.BAD_REQUEST).send("No file uploaded.");
+	if (!req.file) {
+		return res
+			.status(StatusCodes.BAD_REQUEST)
+			.json({ message: "No file uploaded." });
+	}
 
 	const imageData = {
 		name: req.file.originalname,
@@ -38,13 +51,15 @@ const changeImageData = async (req, res) => {
 	try {
 		await ImageService.changeImageData(imageID, imageData);
 
-		return res.status(StatusCodes.CREATED).json({
+		return res.status(StatusCodes.OK).json({
+			id_image: imageID,
 			message: "Image data updated successfully",
 		});
 	} catch (error) {
-		return res
-			.status(StatusCodes.INTERNAL_SERVER_ERROR)
-			.json({ message: error.message });
+		console.error("Błąd przy aktualizacji obrazka:", error);
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			message: error.message || "Server error while updating image",
+		});
 	}
 };
 
@@ -53,16 +68,22 @@ const getImageByID = async (req, res) => {
 
 	try {
 		const image = await ImageService.getImageByID(id);
-		if (image === null)
+
+		if (!image) {
 			return res
 				.status(StatusCodes.NOT_FOUND)
 				.json({ message: "Image not found" });
+		}
 
 		res.setHeader("Content-Type", image.mimetype);
-		res.setHeader("Content-Disposition", 'inline; filename="${image.name}"');
-		return res.status(StatusCodes.CREATED).send(image.data);
+		res.setHeader("Content-Disposition", `inline; filename="${image.name}"`);
+
+		return res.status(StatusCodes.OK).send(image.data);
 	} catch (error) {
-		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+		console.error("Błąd przy pobieraniu obrazka:", error);
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			message: error.message || "Server error while retrieving image",
+		});
 	}
 };
 

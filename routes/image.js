@@ -3,10 +3,6 @@ const router = express.Router();
 const multer = require("multer");
 
 const {
-	authenticate,
-	authorizeRole,
-} = require("../middleware/authenticate.js");
-const {
 	addNewImage,
 	changeImageData,
 	getImageByID,
