@@ -8,9 +8,15 @@ const createAdvice = async (adviceData) => {
     return advice.toJSON();
 };
 
-const getAllAdvices = async (shelterId) => {
+const getAllShelterAdvices = async (shelterId) => {
     const advices = await Advice.findAll({
         where: { id_shelter: shelterId }
+    });
+    return advices.map(a => a.toJSON());
+};
+
+const getAllAdvices = async () => {
+    const advices = await Advice.findAll({
     });
     return advices.map(a => a.toJSON());
 };
@@ -74,6 +80,7 @@ const updateAdviceContent = async ( adviceData ) => {
 
 module.exports = {
     createAdvice,
+    getAllShelterAdvices,
     getAllAdvices,
     getAdviceById, 
     updateAdviceTitle,
