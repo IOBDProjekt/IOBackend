@@ -12,6 +12,7 @@ const validators = {
 	tag: require("../validators/tagValidator"),
 	advice: require("../validators/adviceValidator"),
 	pet: require("../validators/petValidator"),
+	messages: require("../validators/messageValidator")
 };
 
 const validate = (validator) => {

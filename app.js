@@ -1,5 +1,9 @@
 const express = require("express");
+const http = require("http");
+const WebSocket = require("ws");
+
 const app = express();
+const server = http.createServer(app);
 const cors = require("cors");
 
 const db = require("./models");
@@ -31,5 +35,48 @@ app.use("/breed", require("./routes/breed"));
 app.use("/pet", require("./routes/pet"));
 app.use("/tag", require("./routes/tag"));
 app.use("/email", require("./routes/email"));
+app.use("/message", require("./routes/messages"));
 
-app.listen(PORT, () => console.log(`App is running on port ${PORT}`));
+server.listen(PORT, () => console.log(`App is running on port ${PORT}`));
+
+// Websocket Setup
+
+const wss = new WebSocket.Server({ server });
+const clients = new Map();
+
+wss.on("connection", (ws) => {
+  ws.on("message", (message) => {
+    try {
+      const data = JSON.parse(message);
+      const { type, userId, toUserId, content, id_pet } = data;
+
+      if (type === "init") {
+        clients.set(userId, ws);
+        ws.userId = userId;
+        console.log(`User ${userId} connected`);
+      }
+
+      if (type === "message") {
+        const receiverSocket = clients.get(toUserId);
+        if (receiverSocket && receiverSocket.readyState === WebSocket.OPEN) {
+          receiverSocket.send(JSON.stringify({
+            type: "new_message",
+            fromUserId: userId,
+            content,
+            id_pet
+          }));
+        }
+      }
+    } catch (err) {
+      console.error("WebSocket error: ", err);
+    }
+  });
+
+  ws.on("close", () => {
+    if (ws.userId) {
+      clients.delete(ws.userId);
+    }
+  });
+}
+
+); 
