@@ -1,13 +1,24 @@
 const jwt = require("jsonwebtoken");
-const { Resend } = require("resend");
 const fs = require("fs");
+const nodemailer = require("nodemailer");
 
 const { StatusCodes } = require("http-status-codes");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const UserService = require("../services/userService.js");
 const path = require("path");
+
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT, 10),
+    secure: true,
+    debug: true,
+    logger: true,
+    connectionTimeout: 10000,
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+    },
+});
 
 const register = async (req, res) => {
     const userData = {
@@ -90,14 +101,15 @@ const forgotPassword = async (req, res) => {
         const emailContent = fs.readFileSync(emailContentPath, "utf-8");
         const emailHTML = emailContent.replace("{{LINK}}", registerLink);
 
-        const emailPayload = {
-            from: "szczesliwe.lapki@resend.dev",
+        const mailOptions = {
+            from: process.env.SENDER_EMAIL,
             to: email,
-            subject: "Szczęśliwe łapki - Resetowanie hasła",
+            subject: "Szczęśliwe łapki - Przypomnienie hasła",
             html: emailHTML,
+            text: "Przypomnienie hasła",
         };
 
-        await resend.emails.send(emailPayload);
+        const info = await transporter.sendMail(mailOptions);
 
         return res.json({
             message: "Wiadmość email została pomyślnie wysłana",
@@ -138,7 +150,7 @@ const emailCheck = async (req, res) => {
         if (emailExists) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: "Email jest już w użyciu" });
         } else {
-            const emailToken = await jwt.sign({ email: email }, process.env.SECRET_TOKEN);
+            const emailToken = jwt.sign({ email: email }, process.env.SECRET_TOKEN);
 
             const registerLink = `${process.env.REACT_APP_URL}/register?email=${emailToken}`;
 
@@ -147,14 +159,15 @@ const emailCheck = async (req, res) => {
             const emailContent = fs.readFileSync(emailContentPath, "utf-8");
             const emailHTML = emailContent.replace("{{LINK}}", registerLink);
 
-            const emailPayload = {
-                from: "szczesliwe.lapki@resend.dev",
+            const mailOptions = {
+                from: process.env.SENDER_EMAIL,
                 to: email,
                 subject: "Szczęśliwe łapki - Zakładanie konta",
                 html: emailHTML,
+                text: "Dołącz do nasze platformy już dziś!",
             };
 
-            await resend.emails.send(emailPayload);
+            const info = await transporter.sendMail(mailOptions);
 
             return res.json({
                 message: "Wiadmość email została pomyślnie wysłana",

@@ -1,9 +1,4 @@
-const jwt = require("jsonwebtoken");
-const { Resend } = require("resend");
-
 const { StatusCodes } = require("http-status-codes");
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 const TagService = require("../services/tagService.js");
 

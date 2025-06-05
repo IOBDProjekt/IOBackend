@@ -43,6 +43,10 @@ Favourite.associate = (models) => {
         foreignKey: "id_user",
         as: "user",
     });
+    Favourite.belongsTo(models.Pet, {
+        foreignKey: "id_pet",
+        as: "pet",
+    });
 };
 
 module.exports = Favourite;

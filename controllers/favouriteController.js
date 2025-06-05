@@ -17,14 +17,21 @@ const newFavourite = async (req, res) => {
             favourite: fav,
         });
     } catch (error) {
-        return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: error.message });
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
 
 const removeFavourite = async (req, res) => {
-    res.json(req.authData);
+    const petID = req.params.id;
+    const userID = req.authData["id_user"];
+
+    try {
+        const result = await FavouriteService.deleteFavourite(userID, petID);
+
+        return res.status(StatusCodes.OK).json({ message: "Pomyślnie usunięto polubienie" });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
 };
 
 const allFavourite = async (req, res) => {
@@ -43,8 +50,22 @@ const allFavourite = async (req, res) => {
     }
 };
 
+const checkFavourite = async (req, res) => {
+    const userID = req.authData["id_user"];
+    const petID = req.body["id_pet"];
+
+    try {
+        const result = await FavouriteService.checkFavouriteByUserID(userID, petID);
+
+        return res.json({ result: result });
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
+};
+
 module.exports = {
     newFavourite,
     removeFavourite,
     allFavourite,
+    checkFavourite,
 };

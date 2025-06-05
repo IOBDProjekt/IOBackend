@@ -1,4 +1,4 @@
-POST http://localhost:3000/auth/register
+POST http://localhost:5000/auth/register
 Content-Type: application/json
 
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3000/auth/register-shelter
+POST http://localhost:5000/auth/register-shelter
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoyLCJmaXJzdG5hbWUiOiJQb2xhayIsImxhc3RuYW1lIjoiV2llbGtpIiwiY2l0eSI6IldhZG93aWNlIDIxLzM3IiwiZW1haWwiOiJzaGVsdGVyQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEg3bURnSktLeFRiRWNjdHFPeUN5OWVuREFkYnNoRUhOOWVqVW5wMVZic2EvL2lTQ0JXMi9LIiwicm9sZSI6InNoZWx0ZXIiLCJpYXQiOjE3NDgxMDAxNzMsImV4cCI6MTc0ODEwMzc3M30.1x3Dl4E4FML0pne3MS9CJunk715-pqFrZ2fzJ3dKK60
 Content-Type: application/json
 
@@ -47,20 +47,20 @@ POST http://localhost:5000/auth/login
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
-    "password": "admin"
+    "email": "jakub213x@gmail.com",
+    "password": "123"
 }
 
 
 ###
 
-GET http://localhost:3000/auth/me
+GET http://localhost:5000/auth/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJlbWFpbCI6Impha3ViMjEzeEBnbWFpbC5jb20iLCJ1c2VybmFtZSI6Ikpha3ViIiwicGFzc3dvcmQiOiIkMmIkMTAkR0JIeHlrVTh1cGJlZWJYQnlyaTZkT1BPUGpyWld6LzRmMWdNdS9tRC95RHlVdDRFeUwxajIiLCJjaXR5IjpudWxsLCJyb2xlIjoidXNlciIsImlhdCI6MTc0NzU4MTEyMywiZXhwIjoxNzQ3NTg0NzIzfQ.NhabcuWNu_KEzKV8hMH3yVH_QnhUf8NolDr3nTb-w1M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxMywiZmlyc3RuYW1lIjoiS3ViYSIsImxhc3RuYW1lIjoiSyIsImNpdHkiOiJSemVzesOzdyIsImVtYWlsIjoiamFrdWIyMTN4QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJFdrbEhnbG5qbVlScmtaNlZTNy9UMXVvdnNWWGt6Ui5oOGJzcEpYeDVuM2svUHhraEE4SEJpIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NDkxNDUzNzJ9.gU9D1lTOq2D0QQidfNblymvaA945z4g6UvXVZV7TH4s
 
 ###
 
-POST http://localhost:3000/auth/forgot-password
+POST http://localhost:5000/auth/forgot-password
 Content-Type: application/json
 
 {
@@ -68,7 +68,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3000/auth/reset-password
+POST http://localhost:5000/auth/reset-password
 Content-Type: application/json
 
 {
