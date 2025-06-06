@@ -8,7 +8,7 @@ const {
 	getImageByID,
 } = require("../controllers/imageController.js");
 
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({ storage: multer.memoryStorage() }); 
 
 router
 	.post("", upload.single("image"), addNewImage)

@@ -17,7 +17,7 @@ const Image = sequelize.define(
 		},
 		encoding: {
 			type: DataTypes.STRING(45),
-			allowNull: false,
+			allowNull: false, 
 		},
 		mimetype: {
 			type: DataTypes.STRING(45),

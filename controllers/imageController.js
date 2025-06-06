@@ -5,7 +5,7 @@ const addNewImage = async (req, res) => {
 	if (!req.file) {
 		return res
 			.status(StatusCodes.BAD_REQUEST)
-			.json({ message: "No file uploaded." });
+			.json({ message: "No file uploaded." }); 
 	}
 
 	const imageData = {
