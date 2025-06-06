@@ -1,7 +1,7 @@
 const Image = require("../models/Image")
 
 async function createImage({ name, encoding, mimetype, size, data }) {
-    const image = await Image.create({name, encoding, size, data });
+    const image = await Image.create({name, encoding, mimetype, size, data });
     return { id_image: image.id_image };
 }
 

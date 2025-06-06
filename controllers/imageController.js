@@ -16,6 +16,8 @@ const addNewImage = async (req, res) => {
 		data: req.file.buffer,
 	};
 
+	console.log("imageData do zapisania:", imageData);
+
 	try {
 		const savedImage = await ImageService.createImage(imageData);
 
