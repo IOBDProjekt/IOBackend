@@ -5,7 +5,7 @@ const addNewImage = async (req, res) => {
 	if (!req.file) {
 		return res
 			.status(StatusCodes.BAD_REQUEST)
-			.json({ message: "No file uploaded." }); 
+			.json({ message: "No file uploaded." });
 	}
 
 	const imageData = {
@@ -15,8 +15,6 @@ const addNewImage = async (req, res) => {
 		size: req.file.size,
 		data: req.file.buffer,
 	};
-
-	console.log("imageData do zapisania:", imageData);
 
 	try {
 		const savedImage = await ImageService.createImage(imageData);
