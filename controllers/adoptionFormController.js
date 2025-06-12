@@ -34,7 +34,38 @@ const getAllAdoptionForms = async (req, res) => {
     }
 };
 
+const rejectAdoptionForm = async (req, res) => {
+    const id = +req.params.id;
+    try {
+        const deleted = await AdoptionFormService.deleteById(id);
+        if (!deleted) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: "Wniosek nie istnieje" });
+        }
+        return res.json({ message: "Wniosek odrzucony" });
+    } catch (err) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    }
+};
+
+// NOWE: akceptacja — oznacza wniosek i zwierzaka
+const acceptAdoptionForm = async (req, res) => {
+    const id = +req.params.id;
+    try {
+        const petID = await AdoptionFormService.getPetIdByFormId(id);
+        // 1) zmiana statusu wniosku
+        await AdoptionFormService.updateStatus(id, "Zaakceptowany");
+        // 2) oznaczenie zwierzaka jako oddanego
+        await AdoptionFormService.markPetAsAdopted(petID);
+
+        return res.json({ message: "Wniosek zaakceptowany" });
+    } catch (err) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    }
+};
+
 module.exports = {
     addAdoptionForm,
     getAllAdoptionForms,
+    rejectAdoptionForm,
+    acceptAdoptionForm,
 };
