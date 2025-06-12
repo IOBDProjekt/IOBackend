@@ -15,7 +15,7 @@ POST http://localhost:5000/auth/email-verification
 Content-Type: application/json
 
 {
-    "email": "jakub213x@gmail.com"
+    "email": "wwbjjv46hh@jkotypc.com"
 }
 
 ###
