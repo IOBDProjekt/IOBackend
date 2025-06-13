@@ -16,11 +16,11 @@ const {
 } = require("../controllers/petController.js");
 
 router
-	.post("/", authenticate, validate("pet"), addPet)
+	.post("/", authenticate, authorizeRole("shelter"), validate("pet"), addPet)
 	.get("/", allPets)
 	.get("/active", activePets)
 	.get("/:id", getPetByID)
 	.get("/shelter/:id", getAllPetsByUserID)
-	.put("/:id", authenticate, changePetData);
+	.put("/:id", authenticate, authorizeRole("shelter"), changePetData);
 
 module.exports = router;
