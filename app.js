@@ -53,22 +53,32 @@ wss.on("connection", (ws) => {
             const { type, userId, toUserId, content, id_pet } = data;
 
             if (type === "init") {
-                clients.set(userId, ws);
                 ws.userId = userId;
-                console.log(`User ${userId} connected`);
+
+                if (!clients.has(userId)) {
+                    clients.set(userId, new Set());
+                }
+                clients.get(userId).add(ws);
+
+                console.log(`User ${userId} connected (total: ${clients.get(userId).size})`);
             }
 
             if (type === "message") {
-                const receiverSocket = clients.get(toUserId);
-                if (receiverSocket && receiverSocket.readyState === WebSocket.OPEN) {
-                    receiverSocket.send(
-                        JSON.stringify({
-                            type: "new_message",
-                            fromUserId: userId,
-                            content,
-                            id_pet,
-                        })
-                    );
+                const receiverSockets = clients.get(toUserId);
+
+                if (receiverSockets) {
+                    for (const socket of receiverSockets) {
+                        if (socket.readyState === WebSocket.OPEN) {
+                            socket.send(
+                                JSON.stringify({
+                                    type: "new_message",
+                                    fromUserId: userId,
+                                    content,
+                                    id_pet,
+                                })
+                            );
+                        }
+                    }
                 }
             }
         } catch (err) {
@@ -77,8 +87,17 @@ wss.on("connection", (ws) => {
     });
 
     ws.on("close", () => {
-        if (ws.userId) {
-            clients.delete(ws.userId);
+        const userId = ws.userId;
+        if (userId && clients.has(userId)) {
+            const userSockets = clients.get(userId);
+            userSockets.delete(ws);
+
+            if (userSockets.size === 0) {
+                clients.delete(userId);
+            }
+
+            console.log(`User ${userId} disconnected (remaining: ${userSockets.size})`);
         }
     });
 });
+
